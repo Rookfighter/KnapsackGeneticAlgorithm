@@ -46,11 +46,11 @@ public class RouletteToDieSelector implements IToDieSelector {
 		
 		float randomPick = random.nextFloat() * inverseQualitySum;
 		
-		inverseQualitySum = 0;
+		float topQuality = 0;
 		Knapsack result = null;
 		for(Knapsack individuum : individuums) {
-			inverseQualitySum += (qualitySum / qualityCalculator.getQuality(individuum));
-			if(inverseQualitySum <= randomPick) {
+			topQuality += (qualitySum / qualityCalculator.getQuality(individuum));
+			if(topQuality >= randomPick) {
 				result = individuum;
 				break;
 			}

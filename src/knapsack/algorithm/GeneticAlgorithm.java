@@ -47,6 +47,7 @@ public class GeneticAlgorithm {
 		ITerminationCondition condition = new GenerationTermination(GENERATION_LIMIT);
 		
 		do {
+			System.out.println(population.individuums().size());
 			statistics.nextGeneration(population);
 			selecion(population);
 			mutator.mutate(population, p_task);
@@ -58,11 +59,10 @@ public class GeneticAlgorithm {
 	private void selecion(Population p_population) {
 		
 		List<Knapsack> parents = parentSelector.selectParents(p_population);
-		
 		List<Knapsack> toDie = toDieSelector.selectToDie(p_population, parents.size()); 
-		p_population.individuums().removeAll(toDie);
-		
 		List<Knapsack> children = crossover.crossover(parents);
+		
+		p_population.individuums().removeAll(toDie);
 		p_population.individuums().addAll(children);
 	}
 	

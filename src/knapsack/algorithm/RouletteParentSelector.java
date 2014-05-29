@@ -27,18 +27,20 @@ public class RouletteParentSelector implements IParentSelector {
 	@Override
 	public List<Knapsack> selectParents(Population p_population) {
 		individuums = new LinkedList<Knapsack>(p_population.individuums());
+		List<Knapsack> result = new ArrayList<Knapsack>((int) (individuums.size() * breedProbability));
 		
-		int parentCount = (int) (p_population.individuums().size() * breedProbability);
-		if(parentCount % 2 != 0)
-			parentCount--;
-		
-		List<Knapsack> result = new ArrayList<Knapsack>(parentCount);
-		
-		for(int i = 0; i < parentCount && !individuums.isEmpty(); i++) {
-			Knapsack parent = rouletteSelection();
-			individuums.remove(parent);
-			result.add(parent);
+		for(int i = 0; i < p_population.individuums().size(); i++) {
+			boolean breed = random.nextFloat() <= breedProbability;
+			if(breed) {
+				Knapsack parent = rouletteSelection();
+				individuums.remove(parent);
+				result.add(parent);
+			}
 		}
+		// parent count has to even
+		if(result.size() % 2 != 0)
+			result.remove(result.size() - 1);
+		
 		return result;
 	}
 	
@@ -50,11 +52,11 @@ public class RouletteParentSelector implements IParentSelector {
 		
 		float randomPick = random.nextFloat() * qualitySum;
 		
-		qualitySum = 0;
+		float topQuality = 0;
 		Knapsack result = null;
 		for(Knapsack individuum : individuums) {
-			qualitySum += qualityCalculator.getQuality(individuum);
-			if(qualitySum <= randomPick) {
+			topQuality += qualityCalculator.getQuality(individuum);
+			if(topQuality >= randomPick) {
 				result = individuum;
 				break;
 			}

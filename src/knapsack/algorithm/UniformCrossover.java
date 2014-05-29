@@ -3,6 +3,7 @@ package knapsack.algorithm;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import knapsack.algorithm.interfaces.ICrossover;
@@ -26,8 +27,6 @@ public class UniformCrossover implements ICrossover {
 		for(int i = 0; i < p_parents.size() - 1; i += 2) {
 			Knapsack daddy = p_parents.get(i);
 			Knapsack mommy = p_parents.get(i + 1);
-			System.out.printf("Daddy: %d.\n", daddy.items().size());
-			System.out.printf("Mommy: %d.\n", mommy.items().size());
 			result.addAll(getChildren(mommy, daddy));
 		}
 		
@@ -43,7 +42,7 @@ public class UniformCrossover implements ICrossover {
 		for(int i = 0; i < itemCount; ++i)
 			itemMask[i] = random.nextBoolean();
 		
-		Knapsack child = new Knapsack();
+		Knapsack child = new Knapsack(mommy.maxWeight);
 		for(int i = 0; i < itemCount; ++i) {
 			if(itemMask[i] && i < daddy.items().size())
 				child.items().add(daddy.items().get(i));
@@ -53,7 +52,7 @@ public class UniformCrossover implements ICrossover {
 		applyToRules(mommy, daddy, child);
 		result.add(child);
 		
-		child = new Knapsack();
+		child = new Knapsack(mommy.maxWeight);
 		for(int i = 0; i < itemCount; ++i) {
 			if(itemMask[i] && i < mommy.items().size())
 				child.items().add(mommy.items().get(i));

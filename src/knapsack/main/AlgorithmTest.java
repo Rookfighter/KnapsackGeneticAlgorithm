@@ -9,7 +9,7 @@ import knapsack.misc.KnapsackParser;
 public class AlgorithmTest {
 
 	public static void main(String[] args) {
-		KnapsackParser parser = new KnapsackParser("mknapcb1.txt");
+		KnapsackParser parser = new KnapsackParser("res/mknapcb1.txt");
 		GeneticAlgorithm algorithm = new GeneticAlgorithm();
 		
 		try {

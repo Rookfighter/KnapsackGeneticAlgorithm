@@ -12,6 +12,8 @@ import knapsack.container.Population;
 
 public class RandomMutator implements IMutator {
 
+	private static final int MAX_TIMEOUT = 20;
+	
 	private float mutationProbability;
 	
 	private final Random random = new Random();
@@ -24,23 +26,34 @@ public class RandomMutator implements IMutator {
 	public void mutate(Population p_population, KnapsackTask p_task) {
 		List<Knapsack> individuums = new LinkedList<Knapsack>(p_population.individuums());
 		
-		
-		int mutationCount = (int) (mutationProbability * individuums.size());
-		
-		int count = 0;
-		while(!individuums.isEmpty() && count < mutationCount) {
-			Knapsack individuum = individuums.get(random.nextInt(individuums.size()));
-			
-			individuum.items().remove(random.nextInt(individuum.items().size()));
-			
-			KnapsackItem toAdd = null;
-			do {
-				toAdd = p_task.items().get(random.nextInt(p_task.items().size()));
-			} while (toAdd.weight + individuum.getTotalWeight() > individuum.maxWeight);
-			
-			individuum.items().add(toAdd);
-			individuums.remove(individuum);
-			count++;
+		for(int i = 0; i < p_population.individuums().size(); ++i) {
+			boolean mutate = random.nextFloat() <= mutationProbability;
+			if(mutate) {
+				int index = random.nextInt(individuums.size());
+				Knapsack individuum = individuums.get(index);
+				
+				index = random.nextInt(individuum.items().size());
+				individuum.items().remove(index);
+				
+				List<KnapsackItem> availableItems = new LinkedList<KnapsackItem>(p_task.items());
+				availableItems.removeAll(individuum.items());
+
+				int timeout = 0;
+				boolean found = false;
+				KnapsackItem toAdd = null;
+				while(!found && timeout < MAX_TIMEOUT && !availableItems.isEmpty()) {
+					index = random.nextInt(availableItems.size());
+					toAdd = availableItems.get(index);
+						
+					found = (toAdd.weight + individuum.getTotalWeight()) <= individuum.maxWeight;
+					availableItems.remove(toAdd);
+					timeout++;
+				}
+				
+				if(found)
+					individuum.items().add(toAdd);
+				individuums.remove(individuum);
+			}
 		}
 	}
 

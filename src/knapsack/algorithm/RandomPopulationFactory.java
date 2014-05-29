@@ -1,5 +1,6 @@
 package knapsack.algorithm;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -31,7 +32,7 @@ public class RandomPopulationFactory implements IPopulationFactory {
 			Knapsack individuum = new Knapsack(p_task.getKnapsack().maxWeight);
 			
 			int timeout = 0;
-			List<KnapsackItem> itemList = task.items();
+			List<KnapsackItem> itemList = new LinkedList<KnapsackItem>(task.items());
 			
 			while(true) {
 				if(itemList.isEmpty() || timeout >= MAX_TIMEOUT)
