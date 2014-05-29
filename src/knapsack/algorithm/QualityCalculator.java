@@ -1,4 +1,7 @@
-package knapsack;
+package knapsack.algorithm;
+
+import knapsack.algorithm.interfaces.IQualityCalculator;
+import knapsack.container.Knapsack;
 
 public class QualityCalculator implements IQualityCalculator {
 

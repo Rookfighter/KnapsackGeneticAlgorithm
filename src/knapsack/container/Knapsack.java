@@ -1,4 +1,4 @@
-package knapsack;
+package knapsack.container;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,6 +42,10 @@ public class Knapsack {
 		return currentWeight > maxWeight;
 	}
 	
+	public boolean containsItem(KnapsackItem p_item) {
+		return items.contains(p_item);
+	}
+	
 	public void add(KnapsackItem p_item) {
 		if(items.add(p_item)) {
 			currentWeight += p_item.weight;
@@ -54,6 +58,47 @@ public class Knapsack {
 			currentWeight -= p_item.weight;
 			currentProfit -= p_item.profit;
 		}
+	}
+	
+	public void remove(final int p_index) {
+		KnapsackItem removed = items.remove(p_index);
+		if(removed != null) {
+			currentWeight -= removed.weight;
+			currentProfit -= removed.profit;
+		}
+	}
+	
+	public void removeItems(List<KnapsackItem> p_items) {
+		for(KnapsackItem item : p_items)
+			remove(item);
+	}
+	
+	public List<KnapsackItem> getItems() {
+		return items;
+	}
+	
+	public void removeLowestProfitItem() {
+		if(items.isEmpty())
+			return;
+		
+		KnapsackItem toRemove = items.get(0);
+		for(KnapsackItem item : items)
+			if(item.profit < toRemove.profit)
+				toRemove = item;
+		
+		items.remove(toRemove);
+	}
+	
+	public void removeHighestWeightItem() {
+		if(items.isEmpty())
+			return;
+		
+		KnapsackItem toRemove = items.get(0);
+		for(KnapsackItem item : items)
+			if(item.weight > toRemove.weight)
+				toRemove = item;
+		
+		items.remove(toRemove);
 	}
 	
 	public KnapsackItem getItem(final int p_idx) {

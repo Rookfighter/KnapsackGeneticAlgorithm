@@ -1,4 +1,4 @@
-package knapsack;
+package knapsack.container;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +42,10 @@ public class KnapsackTask {
 			result.addItem(item.copy());
 		
 		return result;
+	}
+	
+	public List<KnapsackItem> getItemList() {
+		return items;
 	}
 	
 	public List<KnapsackItem> createItemList() {

@@ -1,10 +1,15 @@
-package knapsack;
+package knapsack.misc;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import knapsack.container.Knapsack;
+import knapsack.container.KnapsackItem;
+import knapsack.container.KnapsackProblem;
+import knapsack.container.KnapsackTask;
 
 public class KnapsackParser {
 

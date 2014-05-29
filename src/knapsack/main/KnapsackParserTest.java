@@ -1,9 +1,9 @@
-package main;
+package knapsack.main;
 
 import java.util.List;
 
-import knapsack.KnapsackParser;
-import knapsack.KnapsackProblem;
+import knapsack.container.KnapsackProblem;
+import knapsack.misc.KnapsackParser;
 
 public class KnapsackParserTest {
 

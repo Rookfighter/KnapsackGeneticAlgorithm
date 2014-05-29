@@ -1,4 +1,4 @@
-package knapsack;
+package knapsack.container;
 
 import java.util.ArrayList;
 import java.util.List;

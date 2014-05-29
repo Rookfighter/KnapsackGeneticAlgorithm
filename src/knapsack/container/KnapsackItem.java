@@ -1,4 +1,4 @@
-package knapsack;
+package knapsack.container;
 
 import java.util.Locale;
 
@@ -15,27 +15,6 @@ public class KnapsackItem {
 	public KnapsackItem(final float p_weight, final float p_value) {
 		weight = p_weight;
 		profit = p_value;
-	}
-	
-	@Override
-	public boolean equals(Object p_object) {
-		if(!(p_object instanceof KnapsackItem))
-			return false;
-		
-		KnapsackItem item = (KnapsackItem) p_object;
-		
-		return weight == item.weight && profit == item.profit;
-	}
-	
-	@Override
-	public int hashCode() {
-		int result = 1;
-		
-		result = result * 17 + (int) weight;
-		result = result * 31 + (int) profit;
-		result *= 13;
-		
-		return result;
 	}
 	
 	@Override

@@ -1,21 +1,29 @@
-package knapsack;
+package knapsack.algorithm;
 
 import java.util.List;
 import java.util.Random;
 
-public class PopulationFactory {
+import knapsack.algorithm.interfaces.IPopulationFactory;
+import knapsack.container.Knapsack;
+import knapsack.container.KnapsackItem;
+import knapsack.container.KnapsackTask;
+import knapsack.container.Population;
+
+public class RandomPopulationFactory implements IPopulationFactory {
 	
 	private static final int MAX_TIMEOUT = 10;
 	
 	KnapsackTask task;
 	Population result;
+	
 	Random random;
 	
-	public PopulationFactory() {
+	public RandomPopulationFactory() {
 		random = new Random();
 	}
-	
-	public Population createRandomPopulation(final int p_size, KnapsackTask p_task) {
+
+	@Override
+	public Population generatePopulation(KnapsackTask p_task, int p_size) {
 		result = new Population(p_size);
 		task = p_task;
 		
@@ -39,7 +47,7 @@ public class PopulationFactory {
 				itemList.remove(index);
 			}
 			
-			result.getIndividuums().add(individuum);
+			result.addIndividuum(individuum);
 		}
 		
 		return result;

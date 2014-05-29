@@ -1,4 +1,4 @@
-package knapsack;
+package knapsack.algorithm;
 
 public class ParentSelector {
 
