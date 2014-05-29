@@ -1,5 +1,7 @@
 package knapsack.misc;
 
+import java.util.Locale;
+
 import knapsack.container.Population;
 
 public class StatisticGenerationElement {
@@ -32,5 +34,10 @@ public class StatisticGenerationElement {
 	
 	public float meanProfit() {
 		return meanProfit;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format(Locale.US, "(%.2f,%.2f,%.2f,%.2f)", totalWeight, totalProfit, meanWeight, meanProfit);
 	}
 }

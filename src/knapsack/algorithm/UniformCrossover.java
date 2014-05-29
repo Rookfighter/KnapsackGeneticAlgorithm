@@ -24,7 +24,11 @@ public class UniformCrossover implements ICrossover {
 		List<Knapsack> result = new ArrayList<Knapsack>(p_parents.size());
 		
 		for(int i = 0; i < p_parents.size() - 1; i += 2) {
-			result.addAll(getChildren(p_parents.get(i) , p_parents.get(i + 1)));
+			Knapsack daddy = p_parents.get(i);
+			Knapsack mommy = p_parents.get(i + 1);
+			System.out.printf("Daddy: %d.\n", daddy.items().size());
+			System.out.printf("Mommy: %d.\n", mommy.items().size());
+			result.addAll(getChildren(mommy, daddy));
 		}
 		
 		return result;
@@ -67,7 +71,7 @@ public class UniformCrossover implements ICrossover {
 			fred.removeLowestProfitItem();
 		
 		List<KnapsackItem> duplicates = new LinkedList<KnapsackItem>();
-		
+		//search for duplicates in fred
 		for(KnapsackItem item1: fred.items())
 		{
 			int count = 0;
@@ -82,6 +86,7 @@ public class UniformCrossover implements ICrossover {
 		
 		fred.items().removeAll(duplicates);
 		
+		//try to maximize quality of fred's DNA with mommie's and daddie's DNA
 		int timeout = 0;
 		while(timeout < MAX_TIMEOUT) {
 			
@@ -93,8 +98,9 @@ public class UniformCrossover implements ICrossover {
 			
 			KnapsackItem toAdd = null;
 			do {
-				toAdd = parent.items().get(random.nextInt(parent.items().size()));
-			} while(toAdd != null && fred.items().contains(toAdd));
+				int index = random.nextInt(parent.items().size());
+				toAdd = parent.items().get(index);
+			} while(fred.items().contains(toAdd));
 			
 			if(fred.getTotalWeight() + toAdd.weight > fred.maxWeight)
 				timeout++;

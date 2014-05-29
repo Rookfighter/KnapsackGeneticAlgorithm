@@ -16,4 +16,14 @@ public class StatisticProblemElement {
 	public Deque<StatisticTaskElement> tasks() {
 		return tasks;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for(StatisticTaskElement task: tasks) {
+			sb.append(task.toString()).append("\n");
+		}
+		
+		return sb.toString().trim();
+	}
 }

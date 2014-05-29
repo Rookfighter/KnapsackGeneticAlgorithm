@@ -32,4 +32,17 @@ public class Statistics {
 		
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		
+		int i = 0;
+		for(StatisticProblemElement problem: problems) {
+			sb.append("Problem ").append(i + 1).append(":\n").append(problem.toString()).append("\n");
+			++i;
+		}
+		
+		return sb.toString().trim();
+	}
+	
 }

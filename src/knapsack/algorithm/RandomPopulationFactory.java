@@ -28,7 +28,7 @@ public class RandomPopulationFactory implements IPopulationFactory {
 		task = p_task;
 		
 		for(int i = 0; i < p_size; ++i) {
-			Knapsack individuum = new Knapsack();
+			Knapsack individuum = new Knapsack(p_task.getKnapsack().maxWeight);
 			
 			int timeout = 0;
 			List<KnapsackItem> itemList = task.items();

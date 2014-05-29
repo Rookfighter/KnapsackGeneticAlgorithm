@@ -18,6 +18,7 @@ import knapsack.misc.Statistics;
 public class GeneticAlgorithm {
 
 	private static final int POPULATION_SIZE = 10;
+	private static final int GENERATION_LIMIT = 10;
 	private static final float BREED_PROBABILITY = 1.0f;
 	private static final float MUTATION_PROBABILITY = 0.1f;
 	
@@ -43,7 +44,7 @@ public class GeneticAlgorithm {
 	private Population solveTask(KnapsackTask p_task) {
 		statistics.nextTask(p_task);
 		Population population = populationFactory.generatePopulation(p_task, POPULATION_SIZE);
-		ITerminationCondition condition = new GenerationTermination(10);
+		ITerminationCondition condition = new GenerationTermination(GENERATION_LIMIT);
 		
 		do {
 			statistics.nextGeneration(population);

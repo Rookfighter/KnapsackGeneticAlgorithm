@@ -22,6 +22,8 @@ public class AlgorithmTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println(algorithm.getStatistics().toString());
 
 	}
 
