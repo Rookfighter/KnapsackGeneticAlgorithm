@@ -26,9 +26,9 @@ public class RouletteParentSelector implements IParentSelector {
 	
 	@Override
 	public List<Knapsack> selectParents(Population p_population) {
-		individuums = new LinkedList<Knapsack>(p_population.getIndividuums());
+		individuums = new LinkedList<Knapsack>(p_population.individuums());
 		
-		int parentCount = (int) (p_population.getIndividuumCount() * breedProbability);
+		int parentCount = (int) (p_population.individuums().size() * breedProbability);
 		if(parentCount % 2 != 0)
 			parentCount--;
 		

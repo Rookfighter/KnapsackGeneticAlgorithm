@@ -7,74 +7,41 @@ import java.util.Locale;
 public class Knapsack {
 
 	public float maxWeight;
-	private float currentWeight;
-	private float currentProfit;
 	
 	private List<KnapsackItem> items;
 	
 	public Knapsack() {
 		maxWeight = 0;
-		currentWeight = 0;
-		currentProfit = 0;
 		items = new LinkedList<KnapsackItem>();
 	}
 	
 	public Knapsack(final float p_maxWeight) {
 		maxWeight = p_maxWeight;
-		currentWeight = 0;
-		currentProfit = 0;
 		items = new LinkedList<KnapsackItem>();
 	}
 	
-	public int count() {
-		return items.size();
+	public List<KnapsackItem> items() {
+		return items;
 	}
 	
 	public float getTotalProfit() {
-		return currentProfit;
+		float totalProfit = 0;
+		for(KnapsackItem item: items)
+			totalProfit += item.profit;
+		
+		return totalProfit;
 	}
 	
 	public float getTotalWeight() {
-		return currentWeight;
+		float totalWeight = 0;
+		for(KnapsackItem item: items)
+			totalWeight += item.weight;
+		
+		return totalWeight;
 	}
 	
 	public boolean overLimit() {
-		return currentWeight > maxWeight;
-	}
-	
-	public boolean containsItem(KnapsackItem p_item) {
-		return items.contains(p_item);
-	}
-	
-	public void add(KnapsackItem p_item) {
-		if(items.add(p_item)) {
-			currentWeight += p_item.weight;
-			currentProfit += p_item.profit;
-		}
-	}
-	
-	public void remove(KnapsackItem p_item) {
-		if(items.remove(p_item)) {
-			currentWeight -= p_item.weight;
-			currentProfit -= p_item.profit;
-		}
-	}
-	
-	public void remove(final int p_index) {
-		KnapsackItem removed = items.remove(p_index);
-		if(removed != null) {
-			currentWeight -= removed.weight;
-			currentProfit -= removed.profit;
-		}
-	}
-	
-	public void removeItems(List<KnapsackItem> p_items) {
-		for(KnapsackItem item : p_items)
-			remove(item);
-	}
-	
-	public List<KnapsackItem> getItems() {
-		return items;
+		return getTotalWeight() > maxWeight;
 	}
 	
 	public void removeLowestProfitItem() {
@@ -100,22 +67,18 @@ public class Knapsack {
 		
 		items.remove(toRemove);
 	}
-	
-	public KnapsackItem getItem(final int p_idx) {
-		return items.get(p_idx);
-	}
-	
+
 	public Knapsack copy() {
 		Knapsack result = new Knapsack(maxWeight);
 		for(KnapsackItem item : items)
-			result.add(item.copy());
+			result.items.add(item.copy());
 		
 		return result;
 	}
 	
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder(String.format(Locale.US, "(%.2f/%.2f,%.2f):", currentWeight, maxWeight, currentProfit));
+		StringBuilder sb = new StringBuilder(String.format(Locale.US, "(%.2f/%.2f,%.2f):", getTotalWeight(), maxWeight, getTotalProfit()));
 		
 		sb.append("{");
 		for(KnapsackItem item : items) {

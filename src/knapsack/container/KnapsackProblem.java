@@ -11,23 +11,15 @@ public class KnapsackProblem {
 		tasks = new ArrayList<KnapsackTask>(p_taskCount);
 	}
 	
-	public void addTask(KnapsackTask p_task) {
-		tasks.add(p_task);
-	}
-	
-	public KnapsackTask getTask(final int p_idx) {
-		return tasks.get(p_idx);
-	}
-	
-	public int taskCount() {
-		return tasks.size();
+	public List<KnapsackTask> tasks() {
+		return tasks;
 	}
 	
 	public KnapsackProblem copy() {
-		KnapsackProblem result = new KnapsackProblem(taskCount());
+		KnapsackProblem result = new KnapsackProblem(tasks.size());
 		
 		for(KnapsackTask task: tasks)
-			result.addTask(task.copy());
+			result.tasks.add(task.copy());
 		
 		return result;
 	}

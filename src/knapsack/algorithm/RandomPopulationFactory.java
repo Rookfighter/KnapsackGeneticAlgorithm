@@ -31,23 +31,24 @@ public class RandomPopulationFactory implements IPopulationFactory {
 			Knapsack individuum = new Knapsack();
 			
 			int timeout = 0;
-			List<KnapsackItem> itemList = task.createItemList();
+			List<KnapsackItem> itemList = task.items();
+			
 			while(true) {
 				if(itemList.isEmpty() || timeout >= MAX_TIMEOUT)
 					break;
 				
-				int index = random.nextInt() % itemList.size();
+				int index = random.nextInt(itemList.size());
 				if((itemList.get(index).weight + individuum.getTotalWeight()) > individuum.maxWeight) {
 					timeout++;
 					continue;
 				}
 				
 				timeout = 0;
-				individuum.add(itemList.get(index));
+				individuum.items().add(itemList.get(index));
 				itemList.remove(index);
 			}
 			
-			result.addIndividuum(individuum);
+			result.individuums().add(individuum);
 		}
 		
 		return result;

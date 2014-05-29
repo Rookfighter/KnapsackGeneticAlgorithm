@@ -18,16 +18,8 @@ public class KnapsackTask {
 		knapsack = p_knapsack;
 	}
 	
-	public void addItem(KnapsackItem p_item) {
-		items.add(p_item);
-	}
-	
-	public KnapsackItem getItem(final int p_idx) {
-		return items.get(p_idx);
-	}
-	
-	public int itemCount() {
-		return items.size();
+	public List<KnapsackItem> items() {
+		return items;
 	}
 	
 	public Knapsack getKnapsack() {
@@ -35,26 +27,14 @@ public class KnapsackTask {
 	}
 	
 	public KnapsackTask copy() {
-		KnapsackTask result = new KnapsackTask(itemCount());
+		KnapsackTask result = new KnapsackTask(items.size());
 		
 		result.setKnapsack(knapsack.copy());
 		for(KnapsackItem item : items)
-			result.addItem(item.copy());
+			result.items.add(item.copy());
 		
 		return result;
 	}
-	
-	public List<KnapsackItem> getItemList() {
-		return items;
-	}
-	
-	public List<KnapsackItem> createItemList() {
-		List<KnapsackItem> result = new ArrayList<KnapsackItem>(items.size());
-		for(KnapsackItem item : items)
-			result.add(item.copy());
-		return result;
-	}
-	
 	
 	@Override
 	public String toString() {
@@ -69,7 +49,6 @@ public class KnapsackTask {
 			sb.deleteCharAt(sb.length() - 1);
 		sb.append("}");
 		
-		return sb.toString();
-			
+		return sb.toString();	
 	}
 }

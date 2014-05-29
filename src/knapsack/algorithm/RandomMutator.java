@@ -22,7 +22,7 @@ public class RandomMutator implements IMutator {
 	
 	@Override
 	public void mutate(Population p_population, KnapsackTask p_task) {
-		List<Knapsack> individuums = new LinkedList<Knapsack>(p_population.getIndividuums());
+		List<Knapsack> individuums = new LinkedList<Knapsack>(p_population.individuums());
 		
 		
 		int mutationCount = (int) (mutationProbability * individuums.size());
@@ -31,14 +31,14 @@ public class RandomMutator implements IMutator {
 		while(!individuums.isEmpty() && count < mutationCount) {
 			Knapsack individuum = individuums.get(random.nextInt(individuums.size()));
 			
-			individuum.remove(random.nextInt(individuum.count()));
+			individuum.items().remove(random.nextInt(individuum.items().size()));
 			
 			KnapsackItem toAdd = null;
 			do {
-				toAdd = p_task.getItemList().get(random.nextInt(p_task.getItemList().size()));
+				toAdd = p_task.items().get(random.nextInt(p_task.items().size()));
 			} while (toAdd.weight + individuum.getTotalWeight() > individuum.maxWeight);
 			
-			individuum.add(toAdd);
+			individuum.items().add(toAdd);
 			individuums.remove(individuum);
 			count++;
 		}

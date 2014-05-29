@@ -23,7 +23,7 @@ public class RouletteToDieSelector implements IToDieSelector {
 	
 	@Override
 	public List<Knapsack> selectToDie(Population p_population, final int p_toDieCount) {
-		individuums = new LinkedList<Knapsack>(p_population.getIndividuums());
+		individuums = new LinkedList<Knapsack>(p_population.individuums());
 		List<Knapsack> result = new ArrayList<Knapsack>(p_toDieCount);
 		
 		for(int i = 0; i < p_toDieCount && !individuums.isEmpty(); i++) {

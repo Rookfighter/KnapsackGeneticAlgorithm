@@ -2,29 +2,27 @@ package knapsack.main;
 
 import java.util.List;
 
+import knapsack.algorithm.GeneticAlgorithm;
 import knapsack.container.KnapsackProblem;
 import knapsack.misc.KnapsackParser;
 
-public class KnapsackParserTest {
+public class AlgorithmTest {
 
 	public static void main(String[] args) {
 		KnapsackParser parser = new KnapsackParser("mknapcb1.txt");
+		GeneticAlgorithm algorithm = new GeneticAlgorithm();
+		
 		try {
 			parser.parse();
 			
 			List<KnapsackProblem> problems = parser.getProblems();
 			
-			for(int i = 0; i < problems.size(); ++i) {
-				System.out.printf("Problem %d:%n", i + 1);
-				KnapsackProblem problem = problems.get(i);
-				for(int j = 0; j < problem.tasks().size(); ++j)
-					System.out.println(problem.tasks().get(j).toString());
-			}
+			algorithm.solve(problems.get(0));
 			
 		} catch (Exception e) {
-			System.err.println(e.toString());
 			e.printStackTrace();
 		}
+
 	}
 
 }

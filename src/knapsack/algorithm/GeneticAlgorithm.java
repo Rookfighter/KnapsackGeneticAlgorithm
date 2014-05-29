@@ -13,6 +13,7 @@ import knapsack.container.Knapsack;
 import knapsack.container.KnapsackProblem;
 import knapsack.container.KnapsackTask;
 import knapsack.container.Population;
+import knapsack.misc.Statistics;
 
 public class GeneticAlgorithm {
 
@@ -26,28 +27,31 @@ public class GeneticAlgorithm {
 	private final IToDieSelector toDieSelector = new RouletteToDieSelector(qualityCalculator);
 	private final ICrossover crossover = new UniformCrossover();
 	private final IMutator mutator = new RandomMutator(MUTATION_PROBABILITY);
+	private final Statistics statistics = new Statistics();
 	
 	public GeneticAlgorithm() {
 
 	}
 	
 	public void solve(KnapsackProblem p_problem){
-		for(int i = 0; i < p_problem.taskCount(); ++i) {
-			solveTask(p_problem.getTask(i));
-			
+		statistics.nextProblem(p_problem);
+		for(KnapsackTask task: p_problem.tasks()) {
+			solveTask(task);
 		}
 	}
 	
 	private Population solveTask(KnapsackTask p_task) {
-		Population result = populationFactory.generatePopulation(p_task, POPULATION_SIZE);
+		statistics.nextTask(p_task);
+		Population population = populationFactory.generatePopulation(p_task, POPULATION_SIZE);
 		ITerminationCondition condition = new GenerationTermination(10);
 		
 		do {
-			selecion(result);
-			mutator.mutate(result, p_task);
+			statistics.nextGeneration(population);
+			selecion(population);
+			mutator.mutate(population, p_task);
 		} while(!condition.terminate());
 		
-		return result;
+		return population;
 	}
 	
 	private void selecion(Population p_population) {
@@ -55,9 +59,13 @@ public class GeneticAlgorithm {
 		List<Knapsack> parents = parentSelector.selectParents(p_population);
 		
 		List<Knapsack> toDie = toDieSelector.selectToDie(p_population, parents.size()); 
-		p_population.removeIndividuums(toDie);
+		p_population.individuums().removeAll(toDie);
 		
 		List<Knapsack> children = crossover.crossover(parents);
-		p_population.addIndividuums(children);
+		p_population.individuums().addAll(children);
+	}
+	
+	public Statistics getStatistics() {
+		return statistics;
 	}
 }

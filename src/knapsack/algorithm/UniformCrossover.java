@@ -33,7 +33,7 @@ public class UniformCrossover implements ICrossover {
 	private List<Knapsack> getChildren(Knapsack mommy, Knapsack daddy) {
 		List<Knapsack> result = new ArrayList<Knapsack>(2);
 		
-		int itemCount = Math.max(daddy.count(), mommy.count());
+		int itemCount = Math.max(daddy.items().size(), mommy.items().size());
 		boolean[] itemMask = new boolean[itemCount];
 		
 		for(int i = 0; i < itemCount; ++i)
@@ -41,20 +41,20 @@ public class UniformCrossover implements ICrossover {
 		
 		Knapsack child = new Knapsack();
 		for(int i = 0; i < itemCount; ++i) {
-			if(itemMask[i] && i < daddy.count())
-				child.add(daddy.getItem(i));
-			else if(i < mommy.count())
-				child.add(mommy.getItem(i));
+			if(itemMask[i] && i < daddy.items().size())
+				child.items().add(daddy.items().get(i));
+			else if(i < mommy.items().size())
+				child.items().add(mommy.items().get(i));
 		}
 		applyToRules(mommy, daddy, child);
 		result.add(child);
 		
 		child = new Knapsack();
 		for(int i = 0; i < itemCount; ++i) {
-			if(itemMask[i] && i < mommy.count())
-				child.add(mommy.getItem(i));
-			else if(i < daddy.count())
-				child.add(daddy.getItem(i));
+			if(itemMask[i] && i < mommy.items().size())
+				child.items().add(mommy.items().get(i));
+			else if(i < daddy.items().size())
+				child.items().add(daddy.items().get(i));
 		}
 		applyToRules(mommy, daddy, child);
 		result.add(child);
@@ -68,10 +68,10 @@ public class UniformCrossover implements ICrossover {
 		
 		List<KnapsackItem> duplicates = new LinkedList<KnapsackItem>();
 		
-		for(KnapsackItem item1: fred.getItems())
+		for(KnapsackItem item1: fred.items())
 		{
 			int count = 0;
-			for(KnapsackItem item2: fred.getItems())
+			for(KnapsackItem item2: fred.items())
 			{
 				if(item1 == item2)
 					count++;
@@ -80,7 +80,7 @@ public class UniformCrossover implements ICrossover {
 			}
 		}
 		
-		fred.removeItems(duplicates);
+		fred.items().removeAll(duplicates);
 		
 		int timeout = 0;
 		while(timeout < MAX_TIMEOUT) {
@@ -93,14 +93,14 @@ public class UniformCrossover implements ICrossover {
 			
 			KnapsackItem toAdd = null;
 			do {
-				toAdd = parent.getItem(random.nextInt(parent.count()));
-			} while(toAdd != null && fred.containsItem(toAdd));
+				toAdd = parent.items().get(random.nextInt(parent.items().size()));
+			} while(toAdd != null && fred.items().contains(toAdd));
 			
 			if(fred.getTotalWeight() + toAdd.weight > fred.maxWeight)
 				timeout++;
 			else {
 				timeout = 0;
-				fred.add(toAdd);
+				fred.items().add(toAdd);
 			}
 		}
 	}

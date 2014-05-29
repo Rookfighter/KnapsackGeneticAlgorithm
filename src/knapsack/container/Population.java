@@ -13,35 +13,7 @@ public class Population {
 		populationSize = p_size;
 	}
 	
-	public void addIndividuum(Knapsack p_knapsack) {
-		individuums.add(p_knapsack);
-	}
-	
-	public void removeIndividuum(Knapsack p_knapsack) {
-		individuums.remove(p_knapsack);
-	}
-	
-	public void removeIndividuum(int p_idx) {
-		individuums.remove(p_idx);
-	}
-	
-	public void addIndividuums(List<Knapsack> p_individuums) {
-		individuums.addAll(p_individuums);
-	}
-	
-	public void removeIndividuums(List<Knapsack> p_individuums) {
-		individuums.removeAll(p_individuums);
-	}
-	
-	public int getIndividuumCount() {
-		return individuums.size();
-	}
-	
-	public boolean hasIndividuums() {
-		return !individuums.isEmpty();
-	}
-	
-	public List<Knapsack> getIndividuums() {
+	public List<Knapsack> individuums() {
 		return individuums;
 	}
 	
