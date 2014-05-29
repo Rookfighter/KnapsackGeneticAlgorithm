@@ -18,4 +18,9 @@ public class GenerationTermination implements ITerminationCondition {
 		return currentGeneration >= targetGeneration ;
 	}
 
+	@Override
+	public void reset() {
+		currentGeneration = 0;
+	}
+
 }

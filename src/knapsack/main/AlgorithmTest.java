@@ -4,13 +4,14 @@ import java.util.List;
 
 import knapsack.algorithm.GeneticAlgorithm;
 import knapsack.container.KnapsackProblem;
+import knapsack.misc.AlgorithmConfig;
 import knapsack.misc.KnapsackParser;
 
 public class AlgorithmTest {
 
 	public static void main(String[] args) {
 		KnapsackParser parser = new KnapsackParser("res/mknapcb1.txt");
-		GeneticAlgorithm algorithm = new GeneticAlgorithm();
+		GeneticAlgorithm algorithm = new GeneticAlgorithm(AlgorithmConfig.createDefaultConfig());
 		
 		System.out.println("Starting Genetic Algorithm.");
 		try {
@@ -20,9 +21,11 @@ public class AlgorithmTest {
 			
 			List<KnapsackProblem> problems = parser.getProblems();
 			
-			System.out.print("Solving problems...");
-			algorithm.solve(problems.get(0));
-			System.out.println(" [Done]");
+			for(int i = 0; i < 1; ++i) {
+				System.out.printf("Solving problem %d...", i + 1);
+				algorithm.solve(problems.get(i));
+				System.out.println(" [Done]");
+			}
 			
 			System.out.print("Saving statistics...");
 			algorithm.getStatistics().saveGnuPlotFiles("plots");

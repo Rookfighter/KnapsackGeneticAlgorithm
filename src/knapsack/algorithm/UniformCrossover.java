@@ -86,19 +86,23 @@ public class UniformCrossover implements ICrossover {
 		
 		//try to maximize quality of fred's DNA with mommie's and daddie's DNA
 		int timeout = 0;
+		List<KnapsackItem> mommiesItems = new LinkedList<KnapsackItem>(mommy.items());
+		List<KnapsackItem> daddiesItems = new LinkedList<KnapsackItem>(daddy.items());
+		mommiesItems.removeAll(fred.items());
+		daddiesItems.removeAll(fred.items());
 		while(timeout < MAX_TIMEOUT) {
 			
-			Knapsack parent;
-			if(random.nextBoolean())
-				parent = daddy;
+			List<KnapsackItem> parentItems;
+			if(random.nextBoolean() && !daddiesItems.isEmpty())
+				parentItems = daddiesItems;
+			else if(!mommiesItems.isEmpty())
+				parentItems = mommiesItems;
 			else
-				parent = mommy;
+				break;
 			
-			KnapsackItem toAdd = null;
-			do {
-				int index = random.nextInt(parent.items().size());
-				toAdd = parent.items().get(index);
-			} while(fred.items().contains(toAdd));
+			int index = random.nextInt(parentItems.size());
+			KnapsackItem toAdd = parentItems.get(index);
+			parentItems.remove(toAdd);
 			
 			if(fred.getTotalWeight() + toAdd.weight > fred.maxWeight)
 				timeout++;

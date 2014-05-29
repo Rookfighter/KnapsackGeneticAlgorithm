@@ -19,4 +19,9 @@ public class TimeTermination implements ITerminationCondition {
 		return secDiff >= targetSeconds;
 	}
 
+	@Override
+	public void reset() {
+		usecBegin = System.nanoTime() / 1000;
+	}
+
 }
