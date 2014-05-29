@@ -3,7 +3,6 @@ package knapsack.algorithm;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 
 import knapsack.algorithm.interfaces.ICrossover;

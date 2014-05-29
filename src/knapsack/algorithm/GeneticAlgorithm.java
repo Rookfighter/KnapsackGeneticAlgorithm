@@ -47,7 +47,6 @@ public class GeneticAlgorithm {
 		ITerminationCondition condition = new GenerationTermination(GENERATION_LIMIT);
 		
 		do {
-			System.out.println(population.individuums().size());
 			statistics.nextGeneration(population);
 			selecion(population);
 			mutator.mutate(population, p_task);
