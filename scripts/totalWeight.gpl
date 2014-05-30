@@ -1,0 +1,9 @@
+set title "Total Weight"
+set xlabel "Generation"
+set ylabel "Weight"
+set key left top
+plot 'task0_totalWeight.txt' using 1:2 with lines title "task1", \
+	 'task1_totalWeight.txt' using 1:2 with lines title "task2", \
+	 'task2_totalWeight.txt' using 1:2 with lines title "task3", \
+	 'task3_totalWeight.txt' using 1:2 with lines title "task4", \
+	 'task4_totalWeight.txt' using 1:2 with lines title "task5"
