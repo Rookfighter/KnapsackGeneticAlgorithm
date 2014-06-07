@@ -15,10 +15,10 @@ public class KnapsackParserTest {
 			List<KnapsackProblem> problems = parser.getProblems();
 			
 			for(int i = 0; i < problems.size(); ++i) {
-				System.out.printf("Problem %d:%n", i + 1);
+				System.out.printf("Problem %d:\n", i + 1);
 				KnapsackProblem problem = problems.get(i);
-				for(int j = 0; j < problem.tasks().size(); ++j)
-					System.out.println(problem.tasks().get(j).toString());
+				for(int j = 0; j < problem.partProblems().length; ++j)
+					System.out.println(problem.partProblems()[j].toString());
 			}
 			
 		} catch (Exception e) {

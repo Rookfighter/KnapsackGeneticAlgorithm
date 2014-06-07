@@ -5,17 +5,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import knapsack.container.Knapsack;
-import knapsack.container.KnapsackItem;
 import knapsack.container.KnapsackProblem;
-import knapsack.container.KnapsackTask;
 
 public class KnapsackParser {
 
 	private String filePath;
 	private int problemCount;
-	
 	
 	private List<KnapsackProblem> problems;
 	
@@ -66,22 +61,15 @@ public class KnapsackParser {
 		int constraintCount = Integer.parseInt(words[1]);
 		
 		//init data structure
-		KnapsackProblem problem = new KnapsackProblem(constraintCount);
-		for(int i = 0; i < constraintCount; ++i) {
-			KnapsackTask task = new KnapsackTask(variableCount);
-			for(int j = 0; j < variableCount; ++j)
-				task.items().add(new KnapsackItem());
-			task.setKnapsack(new Knapsack());		
-			problem.tasks().add(task);
-		}
+		KnapsackProblem problem = new KnapsackProblem(constraintCount, variableCount);
 		
-		//read values
+		//read profits
 		for(int i = 0; i < variableCount; i += words.length) {
 			words = file.readLine().trim().split(" ");
 			for(int j = 0; j < words.length; ++j) {
-				float value = Float.parseFloat(words[j]);
+				int value = Integer.parseInt(words[j]);
 				for(int k = 0; k < constraintCount; ++k)
-					problem.tasks().get(k).items().get(i + j).profit = value;
+					problem.partProblems()[k].items()[i + j].profit = value;
 			}
 		}
 		
@@ -90,7 +78,7 @@ public class KnapsackParser {
 			for(int j = 0; j < variableCount; j += words.length) {
 				words = file.readLine().trim().split(" ");
 				for(int k = 0; k < words.length; ++k)
-					problem.tasks().get(i).items().get(j + k).weight = Float.parseFloat(words[k]);
+					problem.partProblems()[i].items()[j + k].weight = Integer.parseInt(words[k]);
 			}
 		}
 		
@@ -98,18 +86,14 @@ public class KnapsackParser {
 		for(int i = 0; i < constraintCount; i += words.length) {
 			words = file.readLine().trim().split(" ");
 			for(int j = 0; j < words.length; ++j)
-				problem.tasks().get(i + j).getKnapsack().maxWeight = Float.parseFloat(words[j]);
+				problem.partProblems()[i + j].setKnappsackSize(Integer.parseInt(words[j]));
 		}
 		
 		return problem;
 	}
 	
 	public List<KnapsackProblem> getProblems() {
-		ArrayList<KnapsackProblem> result = new ArrayList<KnapsackProblem>(problems.size());
-		for(KnapsackProblem problem : problems)
-			result.add(problem.copy());
-		
-		return result;
+		return problems;
 	}
 	
 }

@@ -1,58 +1,67 @@
 package knapsack.algorithm;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import knapsack.algorithm.interfaces.IQualityCalculator;
 import knapsack.algorithm.interfaces.IToDieSelector;
-import knapsack.container.Knapsack;
 import knapsack.container.Population;
 
 public class RouletteToDieSelector implements IToDieSelector {
 
 	private IQualityCalculator qualityCalculator;
-	private List<Knapsack> individuums;
+	private Population currentPopulation;
+	private boolean[] alreadyDead;
 	
 	private final Random random = new Random();
 	
-	public RouletteToDieSelector(IQualityCalculator p_qualityCalculator) {
+	public RouletteToDieSelector(IQualityCalculator p_qualityCalculator, final int p_populationSize) {
 		qualityCalculator = p_qualityCalculator;
+		alreadyDead = new boolean[p_populationSize];
 	}
 	
 	@Override
-	public List<Knapsack> selectToDie(Population p_population, final int p_toDieCount) {
-		individuums = new LinkedList<Knapsack>(p_population.individuums());
-		List<Knapsack> result = new ArrayList<Knapsack>(p_toDieCount);
+	public List<Integer> selectToDie(Population p_population, final int p_toDieCount) {
+		currentPopulation = p_population;
+		List<Integer> result = new ArrayList<Integer>(p_toDieCount);
+		Arrays.fill(alreadyDead, false);
 		
-		for(int i = 0; i < p_toDieCount && !individuums.isEmpty(); i++) {
-			Knapsack parent = rouletteSelection();
-			individuums.remove(parent);
+		for(int i = 0; i < p_toDieCount; i++) {
+			int parent = rouletteSelection();
+			alreadyDead[parent] = true;
 			result.add(parent);
 		}
 		
 		return result;
 	}
 	
-	private Knapsack rouletteSelection() {
-		float qualitySum = 0;
-		for(Knapsack individuum : individuums)
-			qualitySum += qualityCalculator.getQuality(individuum);
+	private int rouletteSelection() {
+		int qualitySum = 0;
+		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
+			if(!alreadyDead[i])
+				qualitySum += qualityCalculator.getQuality(currentPopulation.individuums()[i]);
+		}
+			
 		
-		float inverseQualitySum = 0;
-		for(Knapsack individuum : individuums)
-			inverseQualitySum += qualitySum / qualityCalculator.getQuality(individuum);
+		int inverseQualitySum = 0;
+		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
+			if(!alreadyDead[i])
+				inverseQualitySum += qualitySum / qualityCalculator.getQuality(currentPopulation.individuums()[i]);
+		}
+			
+		int randomPick = random.nextInt(inverseQualitySum);
 		
-		float randomPick = random.nextFloat() * inverseQualitySum;
-		
-		float topQuality = 0;
-		Knapsack result = null;
-		for(Knapsack individuum : individuums) {
-			topQuality += (qualitySum / qualityCalculator.getQuality(individuum));
-			if(topQuality >= randomPick) {
-				result = individuum;
-				break;
+		int topQuality = 0;
+		int result = -1;
+		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
+			if(!alreadyDead[i]) {
+				topQuality += (qualitySum / qualityCalculator.getQuality(currentPopulation.individuums()[i]));
+				if(topQuality >= randomPick) {
+					result = i;
+					break;
+				}
 			}
 		}
 		

@@ -1,54 +1,45 @@
 package knapsack.container;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class Population {
 
-	private List<Knapsack> individuums;
-	private int populationSize;
+	private KnapsackIndividuum[] individuums;
+	private KnapsackProblem problem;
 	
-	public Population(final int p_size) {
-		individuums = new LinkedList<Knapsack>();
-		populationSize = p_size;
+	public Population(final int p_size, KnapsackProblem p_problem) {
+		problem = p_problem;
+		individuums = new KnapsackIndividuum[p_size];
+		for(int i = 0; i < individuums.length; ++i)
+			individuums[i] = new KnapsackIndividuum(problem);
 	}
 	
-	public List<Knapsack> individuums() {
+	public KnapsackIndividuum[] individuums() {
 		return individuums;
 	}
 	
-	public int getPopulationSize() {
-		return populationSize;
+	public KnapsackProblem problem() {
+		return problem;
 	}
 	
-	public float getMeanWeight() {
-		return getTotalWeight() / individuums.size();
+	public int getMeanWeight() {
+		return getTotalWeight() / individuums.length;
 	}
 	
-	public float getTotalWeight() {
-		float result = 0;
-		for(Knapsack individuum : individuums)
+	public int getTotalWeight() {
+		int result = 0;
+		for(KnapsackIndividuum individuum : individuums)
 			result += individuum.getTotalWeight();
 		
 		return result;
 	}
 	
-	public float getMeanProfit() {
-		return getTotalProfit() / individuums.size();
+	public int getMeanProfit() {
+		return getTotalProfit() / individuums.length;
 	}
 	
-	public float getTotalProfit() {
-		float result = 0;
-		for(Knapsack individuum : individuums)
+	public int getTotalProfit() {
+		int result = 0;
+		for(KnapsackIndividuum individuum : individuums)
 			result += individuum.getTotalProfit();
-		
-		return result;
-	}
-	
-	public Population copy() {
-		Population result = new Population(populationSize);
-		for(Knapsack individuum : individuums)
-			result.individuums.add(individuum.copy());
 		
 		return result;
 	}

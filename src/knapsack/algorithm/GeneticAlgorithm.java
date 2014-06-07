@@ -2,9 +2,8 @@ package knapsack.algorithm;
 
 import java.util.List;
 
-import knapsack.container.Knapsack;
+import knapsack.container.KnapsackIndividuum;
 import knapsack.container.KnapsackProblem;
-import knapsack.container.KnapsackTask;
 import knapsack.container.Population;
 import knapsack.misc.AlgorithmConfig;
 import knapsack.misc.Statistics;
@@ -21,33 +20,25 @@ public class GeneticAlgorithm {
 	
 	public void solve(KnapsackProblem p_problem){
 		statistics.nextProblem(p_problem);
-		for(KnapsackTask task: p_problem.tasks()) {
-			solveTask(task);
-		}
-	}
-	
-	private Population solveTask(KnapsackTask p_task) {
-		statistics.nextTask(p_task);
-		Population population = config.populationFactory.generatePopulation(p_task, config.populationSize);
+		Population population = config.populationFactory.generatePopulation(config.populationSize, p_problem);
 		config.condition.reset();
 		
 		do {
 			statistics.nextGeneration(population);
 			selecion(population);
-			config.mutator.mutate(population, p_task);
+			config.mutator.mutate(population);
 		} while(!config.condition.terminate());
-		
-		return population;
 	}
 	
 	private void selecion(Population p_population) {
 		
-		List<Knapsack> parents = config.parentSelector.selectParents(p_population);
-		List<Knapsack> toDie = config.toDieSelector.selectToDie(p_population, parents.size()); 
-		List<Knapsack> children = config.crossover.crossover(parents);
+		List<Integer> parents = config.parentSelector.selectParents(p_population);
+		List<Integer> toDie = config.toDieSelector.selectToDie(p_population, parents.size()); 
+		List<KnapsackIndividuum> children = config.crossover.crossover(parents, p_population);
 		
-		p_population.individuums().removeAll(toDie);
-		p_population.individuums().addAll(children);
+		//kill indiviuums and add children
+		for(int i = 0; i < toDie.size(); ++i)
+			p_population.individuums()[toDie.get(i)].apply(children.get(i));
 	}
 	
 	public Statistics getStatistics() {

@@ -1,13 +1,13 @@
 package knapsack.algorithm;
 
 import knapsack.algorithm.interfaces.IQualityCalculator;
-import knapsack.container.Knapsack;
+import knapsack.container.KnapsackIndividuum;
 
 public class QualityCalculator implements IQualityCalculator {
 
 	@Override
-	public float getQuality(final Knapsack p_knapsack) {
-		return p_knapsack.getTotalProfit();
+	public int getQuality(final KnapsackIndividuum p_individuum) {
+		return p_individuum.getTotalProfit();
 	}
 
 }

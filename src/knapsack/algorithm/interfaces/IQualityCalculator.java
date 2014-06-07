@@ -1,9 +1,9 @@
 package knapsack.algorithm.interfaces;
 
-import knapsack.container.Knapsack;
+import knapsack.container.KnapsackIndividuum;
 
 public interface IQualityCalculator {
 
-	float getQuality(final Knapsack p_knapsack);
+	int getQuality(final KnapsackIndividuum p_individuum);
 	
 }

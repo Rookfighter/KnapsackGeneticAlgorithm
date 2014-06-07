@@ -1,27 +1,17 @@
 package knapsack.container;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class KnapsackProblem {
 	
-	private List<KnapsackTask> tasks;
+	private KnapsackPartProblem[] partProblems;
 	
-	public KnapsackProblem(final int p_taskCount) {
-		tasks = new ArrayList<KnapsackTask>(p_taskCount);
+	public KnapsackProblem(final int p_partProblemCount, final int p_itemCount) {
+		partProblems = new KnapsackPartProblem[p_partProblemCount];
+		for(int i = 0; i < partProblems.length; ++i)
+			partProblems[i] = new KnapsackPartProblem(p_itemCount);
 	}
 	
-	public List<KnapsackTask> tasks() {
-		return tasks;
+	public KnapsackPartProblem[] partProblems() {
+		return partProblems;
 	}
-	
-	public KnapsackProblem copy() {
-		KnapsackProblem result = new KnapsackProblem(tasks.size());
-		
-		for(KnapsackTask task: tasks)
-			result.tasks.add(task.copy());
-		
-		return result;
-	}
-	
 }

@@ -7,21 +7,21 @@ import knapsack.container.KnapsackProblem;
 
 public class StatisticProblemElement {
 	
-	private Deque<StatisticTaskElement> tasks;
+	private Deque<StatisticGenerationElement> generations;
 	
 	public StatisticProblemElement(KnapsackProblem p_problem) {
-		tasks = new LinkedList<StatisticTaskElement>();
+		generations = new LinkedList<StatisticGenerationElement>();
 	}
 	
-	public Deque<StatisticTaskElement> tasks() {
-		return tasks;
+	public Deque<StatisticGenerationElement> generations() {
+		return generations;
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for(StatisticTaskElement task: tasks) {
-			sb.append(task.toString()).append("\n");
+		for(StatisticGenerationElement gen: generations) {
+			sb.append(gen.toString()).append("\n");
 		}
 		
 		return sb.toString().trim();

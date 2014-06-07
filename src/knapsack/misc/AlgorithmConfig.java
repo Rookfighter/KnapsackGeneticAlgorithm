@@ -31,77 +31,42 @@ public class AlgorithmConfig {
 	public ITerminationCondition condition;
 	
 	private static final int LOW_GEN = 10;
-	private static final int HIGH_GEN = 300;
+	private static final int HIGH_GEN = 100;
 	private static final int LOW_POP = 10;
 	private static final int HIGH_POP = 100;
 	
 	public static AlgorithmConfig lowPopHighGenConfig() {
-		AlgorithmConfig result = new AlgorithmConfig();
-		
-		result.populationSize = LOW_POP;
-		result.breedProbability = 0.7f;
-		result.mutationProbability = 0.2f;
-		result.populationFactory = new RandomPopulationFactory();
-		result.qualityCalculator = new QualityCalculator();
-		result.parentSelector = new RouletteParentSelector(result.qualityCalculator, result.breedProbability);
-		result.toDieSelector = new RouletteToDieSelector(result.qualityCalculator);
-		result.crossover = new UniformCrossover();
-		result.mutator = new RandomMutator(result.mutationProbability);
-		result.generationCount = HIGH_GEN;
-		result.condition = new GenerationTermination(result.generationCount);
-		
-		return result;
+		return createConfig(LOW_POP, HIGH_GEN, 0.7f, 0.2f);
 	}
 	
 	public static AlgorithmConfig highPopLowGenConfig() {
-		AlgorithmConfig result = new AlgorithmConfig();
-		
-		result.populationSize = HIGH_POP;
-		result.breedProbability = 0.7f;
-		result.mutationProbability = 0.2f;
-		result.populationFactory = new RandomPopulationFactory();
-		result.qualityCalculator = new QualityCalculator();
-		result.parentSelector = new RouletteParentSelector(result.qualityCalculator, result.breedProbability);
-		result.toDieSelector = new RouletteToDieSelector(result.qualityCalculator);
-		result.crossover = new UniformCrossover();
-		result.mutator = new RandomMutator(result.mutationProbability);
-		result.generationCount = LOW_GEN;
-		result.condition = new GenerationTermination(result.generationCount);
-		
-		return result;
+		return createConfig(HIGH_POP, LOW_GEN, 0.7f, 0.2f);
 	}
 	
 	public static AlgorithmConfig lowPopLowGenConfig() {
-		AlgorithmConfig result = new AlgorithmConfig();
-		
-		result.populationSize = LOW_POP;
-		result.breedProbability = 0.7f;
-		result.mutationProbability = 0.2f;
-		result.populationFactory = new RandomPopulationFactory();
-		result.qualityCalculator = new QualityCalculator();
-		result.parentSelector = new RouletteParentSelector(result.qualityCalculator, result.breedProbability);
-		result.toDieSelector = new RouletteToDieSelector(result.qualityCalculator);
-		result.crossover = new UniformCrossover();
-		result.mutator = new RandomMutator(result.mutationProbability);
-		result.generationCount = LOW_GEN;
-		result.condition = new GenerationTermination(result.generationCount);
-		
-		return result;
+		return createConfig(LOW_POP, LOW_GEN, 0.7f, 0.2f);
 	}
 	
 	public static AlgorithmConfig highPopHighGenConfig() {
-		AlgorithmConfig result = new AlgorithmConfig();
 		
-		result.populationSize = HIGH_POP;
-		result.breedProbability = 0.7f;
-		result.mutationProbability = 0.2f;
+		return createConfig(HIGH_POP, HIGH_GEN, 0.7f, 0.2f);
+	}
+	
+	public static AlgorithmConfig createConfig(final int p_populationSize,
+											   final int p_generationCount,
+											   final float p_breedProbability,
+											   final float p_mutationProbability) {
+		AlgorithmConfig result = new AlgorithmConfig();
+		result.populationSize = p_populationSize;
+		result.breedProbability = p_breedProbability;
+		result.mutationProbability = p_mutationProbability;
 		result.populationFactory = new RandomPopulationFactory();
 		result.qualityCalculator = new QualityCalculator();
-		result.parentSelector = new RouletteParentSelector(result.qualityCalculator, result.breedProbability);
-		result.toDieSelector = new RouletteToDieSelector(result.qualityCalculator);
+		result.parentSelector = new RouletteParentSelector(result.qualityCalculator, result.breedProbability, result.populationSize);
+		result.toDieSelector = new RouletteToDieSelector(result.qualityCalculator, result.populationSize);
 		result.crossover = new UniformCrossover();
-		result.mutator = new RandomMutator(result.mutationProbability);
-		result.generationCount = HIGH_GEN;
+		result.mutator = new RandomMutator(result.mutationProbability, result.populationSize);
+		result.generationCount = p_generationCount;
 		result.condition = new GenerationTermination(result.generationCount);
 		
 		return result;

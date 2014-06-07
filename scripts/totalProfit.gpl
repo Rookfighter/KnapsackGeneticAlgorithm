@@ -2,8 +2,4 @@ set title "Total Profit"
 set xlabel "Generation"
 set ylabel "Profit"
 set key left top
-plot 'task0_totalProfit.txt' using 1:2 with lines title "task1", \
-	 'task1_totalProfit.txt' using 1:2 with lines title "task2", \
-	 'task2_totalProfit.txt' using 1:2 with lines title "task3", \
-	 'task3_totalProfit.txt' using 1:2 with lines title "task4", \
-	 'task4_totalProfit.txt' using 1:2 with lines title "task5"
+plot 'totalProfit.txt' using 1:2 with lines

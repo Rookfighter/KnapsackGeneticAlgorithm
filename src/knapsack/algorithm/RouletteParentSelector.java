@@ -1,13 +1,12 @@
 package knapsack.algorithm;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import knapsack.algorithm.interfaces.IParentSelector;
 import knapsack.algorithm.interfaces.IQualityCalculator;
-import knapsack.container.Knapsack;
 import knapsack.container.Population;
 
 public class RouletteParentSelector implements IParentSelector {
@@ -15,50 +14,58 @@ public class RouletteParentSelector implements IParentSelector {
 	private IQualityCalculator qualityCalculator;
 	private float breedProbability;
 
-	private List<Knapsack> individuums;
+	Population currentPopulation;
+	boolean[] alreadyBreeded;
 
 	private Random random = new Random();
 	
-	public RouletteParentSelector(IQualityCalculator p_qualityCalculator, final float p_breedProbability) {
+	public RouletteParentSelector(IQualityCalculator p_qualityCalculator, final float p_breedProbability, final int p_populationSize) {
 		qualityCalculator = p_qualityCalculator;
 		breedProbability = p_breedProbability;
+		alreadyBreeded = new boolean[p_populationSize];
 	}
 	
 	@Override
-	public List<Knapsack> selectParents(Population p_population) {
-		individuums = new LinkedList<Knapsack>(p_population.individuums());
-		List<Knapsack> result = new ArrayList<Knapsack>((int) (individuums.size() * breedProbability));
+	public List<Integer> selectParents(Population p_population) {
+		currentPopulation = p_population;
+		Arrays.fill(alreadyBreeded, false);
+	
+		List<Integer> result = new ArrayList<Integer>((int) (currentPopulation.individuums().length * breedProbability));
 		
-		for(int i = 0; i < p_population.individuums().size(); i++) {
+		for(int i = 0; i < currentPopulation.individuums().length; i++) {
 			boolean breed = random.nextFloat() <= breedProbability;
 			if(breed) {
-				Knapsack parent = rouletteSelection();
-				individuums.remove(parent);
+				int parent = rouletteSelection();
+				alreadyBreeded[parent] = true;
 				result.add(parent);
 			}
 		}
-		// parent count has to even
+		// parent count has to be even
 		if(result.size() % 2 != 0)
 			result.remove(result.size() - 1);
 		
 		return result;
 	}
 	
-	private Knapsack rouletteSelection() {
-		float qualitySum = 0;
+	private int rouletteSelection() {
+		int qualitySum = 0;
 		
-		for(Knapsack individuum : individuums)
-			qualitySum += qualityCalculator.getQuality(individuum);
+		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
+			if(!alreadyBreeded[i])
+				qualitySum += qualityCalculator.getQuality(currentPopulation.individuums()[i]);
+		}
 		
-		float randomPick = random.nextFloat() * qualitySum;
+		int randomPick = random.nextInt(qualitySum);
 		
-		float topQuality = 0;
-		Knapsack result = null;
-		for(Knapsack individuum : individuums) {
-			topQuality += qualityCalculator.getQuality(individuum);
-			if(topQuality >= randomPick) {
-				result = individuum;
-				break;
+		int topQuality = 0;
+		int result = -1;
+		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
+			if(!alreadyBreeded[i]) {
+				topQuality += qualityCalculator.getQuality(currentPopulation.individuums()[i]);
+				if(topQuality >= randomPick) {
+					result = i;
+					break;
+				}
 			}
 		}
 		

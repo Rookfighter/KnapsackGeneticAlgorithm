@@ -1,58 +1,54 @@
 package knapsack.algorithm;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Random;
 
 import knapsack.algorithm.interfaces.IMutator;
-import knapsack.container.Knapsack;
-import knapsack.container.KnapsackItem;
-import knapsack.container.KnapsackTask;
+import knapsack.container.KnapsackIndividuum;
 import knapsack.container.Population;
 
 public class RandomMutator implements IMutator {
 
-	private static final int MAX_TIMEOUT = 20;
-	
 	private float mutationProbability;
+	private boolean[] alreadyMutated;
 	
 	private final Random random = new Random();
 	
-	public RandomMutator(final float p_mutationProbability) {
+	public RandomMutator(final float p_mutationProbability, final int p_populationSize) {
 		mutationProbability = p_mutationProbability;
+		alreadyMutated = new boolean[p_populationSize];
 	}
 	
 	@Override
-	public void mutate(Population p_population, KnapsackTask p_task) {
-		List<Knapsack> individuums = new LinkedList<Knapsack>(p_population.individuums());
+	public void mutate(Population p_population) {
+		Arrays.fill(alreadyMutated, false);
 		
-		for(int i = 0; i < p_population.individuums().size(); ++i) {
+		for(int i = 0; i < p_population.individuums().length; ++i) {
 			boolean mutate = random.nextFloat() <= mutationProbability;
 			if(mutate) {
-				int index = random.nextInt(individuums.size());
-				Knapsack individuum = individuums.get(index);
+				int index;
+				do {
+					index = random.nextInt(p_population.individuums().length);
+				} while (alreadyMutated[index]);
 				
-				index = random.nextInt(individuum.items().size());
-				individuum.items().remove(index);
+				KnapsackIndividuum individuum = p_population.individuums()[index];
 				
-				List<KnapsackItem> availableItems = new LinkedList<KnapsackItem>(p_task.items());
-				availableItems.removeAll(individuum.items());
-
-				int timeout = 0;
-				boolean found = false;
-				KnapsackItem toAdd = null;
-				while(!found && timeout < MAX_TIMEOUT && !availableItems.isEmpty()) {
-					index = random.nextInt(availableItems.size());
-					toAdd = availableItems.get(index);
-						
-					found = (toAdd.weight + individuum.getTotalWeight()) <= individuum.maxWeight;
-					availableItems.remove(toAdd);
-					timeout++;
-				}
+				index = random.nextInt(individuum.qualities().length);
+				int index2 = random.nextInt(individuum.qualities()[index].length);
 				
-				if(found)
-					individuum.items().add(toAdd);
-				individuums.remove(individuum);
+				individuum.qualities()[index][index2] = !individuum.qualities()[index][index2];
+				
+				applyToRules(individuum);
+			}
+		}
+	}
+	
+	private void applyToRules(KnapsackIndividuum p_individuum) {
+		for(int i = 0; i < p_individuum.qualities().length; ++i) {
+			while(p_individuum.isOverLimit(i)) {
+				int toRemove = random.nextInt(p_individuum.qualities()[i].length);
+				if(p_individuum.qualities()[i][toRemove])
+					p_individuum.qualities()[i][toRemove] = false;
 			}
 		}
 	}

@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 import knapsack.container.KnapsackProblem;
-import knapsack.container.KnapsackTask;
 import knapsack.container.Population;
 
 public class Statistics {
@@ -28,14 +27,9 @@ public class Statistics {
 		problems.add(new StatisticProblemElement(p_problem));
 	}
 	
-	public void nextTask(KnapsackTask p_task) {
-		problems.getLast().tasks().add(new StatisticTaskElement(p_task));
-	}
-	
 	public void nextGeneration(Population p_population) {
-		problems.getLast().tasks().getLast().generations().add(new StatisticGenerationElement(p_population));
+		problems.getLast().generations().add(new StatisticGenerationElement(p_population));
 	}
-	
 	
 	public void saveGnuPlotFiles(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
 		if(p_dir.endsWith("/") || p_dir.endsWith("\\") && !p_dir.isEmpty())
@@ -63,20 +57,15 @@ public class Statistics {
 	private void saveTotalWeightFiles(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
 		int i = 0;
 		for(StatisticProblemElement problem: problems) {
-			int j = 0;
-			for(StatisticTaskElement task: problem.tasks())
-			{
-				PrintWriter writer = new PrintWriter(String.format("%s/problem%d/task%d_totalWeight.txt", p_dir, i, j), "UTF-8");
-				try {
-					int k = 0;
-					for(StatisticGenerationElement generation: task.generations()) {
-						writer.printf(Locale.US, "%d \t %.2f\n", k, generation.totalWeight());
-						k++;
-					}
-				} finally {
-					writer.close();
+			PrintWriter writer = new PrintWriter(String.format("%s/problem%d/totalWeight.txt", p_dir, i), "UTF-8");
+			try {
+				int k = 0;
+				for(StatisticGenerationElement generation: problem.generations()) {
+					writer.printf(Locale.US, "%d \t %.2f\n", k, generation.totalWeight());
+					k++;
 				}
-				++j;
+			} finally {
+				writer.close();
 			}
 			++i;
 		}
@@ -85,20 +74,15 @@ public class Statistics {
 	private void saveTotalProfitFiles(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
 		int i = 0;
 		for(StatisticProblemElement problem: problems) {
-			int j = 0;
-			for(StatisticTaskElement task: problem.tasks())
-			{
-				PrintWriter writer = new PrintWriter(String.format("%s/problem%d/task%d_totalProfit.txt", p_dir, i, j), "UTF-8");
-				try {
-					int k = 0;
-					for(StatisticGenerationElement generation: task.generations()) {
-						writer.printf(Locale.US, "%d \t %.2f\n", k, generation.totalProfit());
-						k++;
-					}
-				} finally {
-					writer.close();
+			PrintWriter writer = new PrintWriter(String.format("%s/problem%d/totalProfit.txt", p_dir, i), "UTF-8");
+			try {
+				int k = 0;
+				for(StatisticGenerationElement generation: problem.generations()) {
+					writer.printf(Locale.US, "%d \t %.2f\n", k, generation.totalProfit());
+					k++;
 				}
-				j++;
+			} finally {
+				writer.close();
 			}
 			i++;
 		}
@@ -107,20 +91,15 @@ public class Statistics {
 	private void saveMeanWeightFiles(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
 		int i = 0;
 		for(StatisticProblemElement problem: problems) {
-			int j = 0;
-			for(StatisticTaskElement task: problem.tasks())
-			{
-				PrintWriter writer = new PrintWriter(String.format("%s/problem%d/task%d_meanWeight.txt", p_dir, i, j), "UTF-8");
-				try {
-					int k = 0;
-					for(StatisticGenerationElement generation: task.generations()) {
-						writer.printf(Locale.US, "%d \t %.2f\n", k, generation.meanWeight());
-						k++;
-					}
-				} finally {
-					writer.close();
+			PrintWriter writer = new PrintWriter(String.format("%s/problem%d/meanWeight.txt", p_dir, i), "UTF-8");
+			try {
+				int k = 0;
+				for(StatisticGenerationElement generation: problem.generations()) {
+					writer.printf(Locale.US, "%d \t %.2f\n", k, generation.meanWeight());
+					k++;
 				}
-				j++;
+			} finally {
+				writer.close();
 			}
 			i++;
 		}
@@ -129,20 +108,15 @@ public class Statistics {
 	private void saveMeanProfitFiles(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
 		int i = 0;
 		for(StatisticProblemElement problem: problems) {
-			int j = 0;
-			for(StatisticTaskElement task: problem.tasks())
-			{
-				PrintWriter writer = new PrintWriter(String.format("%s/problem%d/task%d_meanProfit.txt", p_dir, i, j), "UTF-8");
-				try {
-					int k = 0;
-					for(StatisticGenerationElement generation: task.generations()) {
-						writer.printf(Locale.US, "%d \t %.2f\n", k, generation.meanProfit());
-						k++;
-					}
-				} finally {
-					writer.close();
+			PrintWriter writer = new PrintWriter(String.format("%s/problem%d/meanProfit.txt", p_dir, i), "UTF-8");
+			try {
+				int k = 0;
+				for(StatisticGenerationElement generation: problem.generations()) {
+					writer.printf(Locale.US, "%d \t %.2f\n", k, generation.meanProfit());
+					k++;
 				}
-				j++;
+			} finally {
+				writer.close();
 			}
 			i++;
 		}

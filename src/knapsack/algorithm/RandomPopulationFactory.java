@@ -1,20 +1,15 @@
 package knapsack.algorithm;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 import knapsack.algorithm.interfaces.IPopulationFactory;
-import knapsack.container.Knapsack;
-import knapsack.container.KnapsackItem;
-import knapsack.container.KnapsackTask;
+import knapsack.container.KnapsackProblem;
 import knapsack.container.Population;
 
 public class RandomPopulationFactory implements IPopulationFactory {
 	
 	private static final int MAX_TIMEOUT = 10;
 	
-	KnapsackTask task;
 	Population result;
 	
 	Random random;
@@ -24,32 +19,31 @@ public class RandomPopulationFactory implements IPopulationFactory {
 	}
 
 	@Override
-	public Population generatePopulation(KnapsackTask p_task, int p_size) {
-		result = new Population(p_size);
-		task = p_task;
+	public Population generatePopulation(int p_size, KnapsackProblem p_problem) {
+		result = new Population(p_size, p_problem);
 		
-		for(int i = 0; i < p_size; ++i) {
-			Knapsack individuum = new Knapsack(p_task.getKnapsack().maxWeight);
-			
-			int timeout = 0;
-			List<KnapsackItem> itemList = new LinkedList<KnapsackItem>(task.items());
-			
-			while(true) {
-				if(itemList.isEmpty() || timeout >= MAX_TIMEOUT)
-					break;
+		for(int i = 0; i < result.individuums().length; ++i) {
+		
+			for(int j = 0; j < result.individuums()[i].qualities().length; ++j) {
 				
-				int index = random.nextInt(itemList.size());
-				if((itemList.get(index).weight + individuum.getTotalWeight()) > individuum.maxWeight) {
-					timeout++;
-					continue;
+				int timeout = 0;
+				while(timeout < MAX_TIMEOUT) {
+					
+					int index = random.nextInt(result.individuums()[i].qualities()[j].length);
+					
+					if(result.individuums()[i].qualities()[j][index]) {
+						++timeout;
+					} else {
+						int weight = result.individuums()[i].getWeight(j);
+						weight += p_problem.partProblems()[j].items()[index].weight;
+						
+						if(weight <= p_problem.partProblems()[j].knappsackSize())
+							result.individuums()[i].qualities()[j][index] = true;
+						else
+							++timeout;
+					}
 				}
-				
-				timeout = 0;
-				individuum.items().add(itemList.get(index));
-				itemList.remove(index);
 			}
-			
-			result.individuums().add(individuum);
 		}
 		
 		return result;
