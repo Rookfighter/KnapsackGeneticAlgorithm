@@ -6,11 +6,16 @@ import knapsack.container.Population;
 
 public class StatisticGenerationElement {
 
-	private float totalWeight;
-	private float totalProfit;
+	private double totalWeight;
+	private double totalProfit;
 	
-	private float meanWeight;
-	private float meanProfit;
+	private double meanWeight;
+	private double meanProfit;
+	
+	private double highestIndidividuumProfit;
+	private double highestKnapsackProfit;
+	
+	private double weightRatio;
 	
 	public StatisticGenerationElement(Population p_population) {
 		totalWeight = p_population.getTotalWeight();
@@ -18,22 +23,39 @@ public class StatisticGenerationElement {
 		
 		meanWeight = p_population.getMeanWeight();
 		meanProfit = p_population.getMeanProfit();
+		
+		highestIndidividuumProfit = p_population.getHighestIndividuumProfit();
+		highestKnapsackProfit = p_population.getHighestKnapsackProfit();
+		
+		weightRatio = p_population.getWeightRatio();
 	}
 	
-	public float totalWeight() {
+	public double totalWeight() {
 		return totalWeight;
 	}
 	
-	public float totalProfit() {
+	public double totalProfit() {
 		return totalProfit;
 	}
 	
-	public float meanWeight() {
+	public double meanWeight() {
 		return meanWeight;
 	}
 	
-	public float meanProfit() {
+	public double meanProfit() {
 		return meanProfit;
+	}
+	
+	public double highestIndividuumProfit() {
+		return highestIndidividuumProfit;
+	}
+	
+	public double highestKnapsackProfit() {
+		return highestKnapsackProfit;
+	}
+	
+	public double weightRatio() {
+		return weightRatio;
 	}
 	
 	@Override

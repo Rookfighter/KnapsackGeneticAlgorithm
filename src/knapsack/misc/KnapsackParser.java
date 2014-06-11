@@ -32,10 +32,8 @@ public class KnapsackParser {
 	}
 	
 	private void readFirstLine() throws IOException {
-		String line = file.readLine().trim();
-		while(line != null && line.isEmpty())
-			line = file.readLine().trim();
 		
+		String line = getNextFilledLine();
 		String[] words = line.split(" ");
 		
 		if(words.length != 1)
@@ -52,7 +50,8 @@ public class KnapsackParser {
 	}
 	
 	private KnapsackProblem readNextProblem() throws IOException {
-		String line = file.readLine().trim();
+		String line = getNextFilledLine();
+		
 		String[] words = line.split(" ");
 		if(words.length < 2)
 			throw new IllegalArgumentException(String.format("First line of problem has too less parameter: %d", words.length));
@@ -65,9 +64,9 @@ public class KnapsackParser {
 		
 		//read profits
 		for(int i = 0; i < variableCount; i += words.length) {
-			words = file.readLine().trim().split(" ");
+			words = getNextFilledLine().split(" ");
 			for(int j = 0; j < words.length; ++j) {
-				int value = Integer.parseInt(words[j]);
+				double value = Double.parseDouble(words[j]);
 				for(int k = 0; k < constraintCount; ++k)
 					problem.partProblems()[k].items()[i + j].profit = value;
 			}
@@ -76,20 +75,29 @@ public class KnapsackParser {
 		//read weights
 		for(int i = 0; i < constraintCount; ++i) {
 			for(int j = 0; j < variableCount; j += words.length) {
-				words = file.readLine().trim().split(" ");
+				words = getNextFilledLine().split(" ");
 				for(int k = 0; k < words.length; ++k)
-					problem.partProblems()[i].items()[j + k].weight = Integer.parseInt(words[k]);
+					problem.partProblems()[i].items()[j + k].weight = Double.parseDouble(words[k]);
 			}
 		}
 		
 		//read max weights
 		for(int i = 0; i < constraintCount; i += words.length) {
-			words = file.readLine().trim().split(" ");
+			words = getNextFilledLine().split(" ");
 			for(int j = 0; j < words.length; ++j)
-				problem.partProblems()[i + j].setKnappsackSize(Integer.parseInt(words[j]));
+				problem.partProblems()[i + j].setKnappsackSize(Double.parseDouble(words[j]));
 		}
 		
 		return problem;
+	}
+	
+	private String getNextFilledLine() throws IOException {
+		String line;
+		do {
+			line = file.readLine().trim();
+		} while(line == null || line.isEmpty());
+		
+		return line;
 	}
 	
 	public List<KnapsackProblem> getProblems() {

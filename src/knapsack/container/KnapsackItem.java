@@ -4,15 +4,15 @@ import java.util.Locale;
 
 public class KnapsackItem {
 
-	public int weight;
-	public int profit;
+	public double weight;
+	public double profit;
 	
 	public KnapsackItem() {
 		weight = 0;
 		profit = 0;
 	}
 	
-	public KnapsackItem(final int p_weight, final int p_value) {
+	public KnapsackItem(final double p_weight, final double p_value) {
 		weight = p_weight;
 		profit = p_value;
 	}

@@ -5,20 +5,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import knapsack.algorithm.interfaces.IQualityCalculator;
+import knapsack.algorithm.interfaces.IFitnessCalculator;
 import knapsack.algorithm.interfaces.IToDieSelector;
 import knapsack.container.Population;
 
 public class RouletteToDieSelector implements IToDieSelector {
 
-	private IQualityCalculator qualityCalculator;
+	private IFitnessCalculator fitnessCalculator;
 	private Population currentPopulation;
 	private boolean[] alreadyDead;
 	
 	private final Random random = new Random();
 	
-	public RouletteToDieSelector(IQualityCalculator p_qualityCalculator, final int p_populationSize) {
-		qualityCalculator = p_qualityCalculator;
+	public RouletteToDieSelector(IFitnessCalculator p_qualityCalculator, final int p_populationSize) {
+		fitnessCalculator = p_qualityCalculator;
 		alreadyDead = new boolean[p_populationSize];
 	}
 	
@@ -38,27 +38,27 @@ public class RouletteToDieSelector implements IToDieSelector {
 	}
 	
 	private int rouletteSelection() {
-		int qualitySum = 0;
+		double fitnessSum = 0;
 		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
 			if(!alreadyDead[i])
-				qualitySum += qualityCalculator.getQuality(currentPopulation.individuums()[i]);
+				fitnessSum += fitnessCalculator.getFitness(currentPopulation.individuums()[i]);
 		}
 			
 		
-		int inverseQualitySum = 0;
+		double inverseFitnessSum = 0;
 		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
 			if(!alreadyDead[i])
-				inverseQualitySum += qualitySum / qualityCalculator.getQuality(currentPopulation.individuums()[i]);
+				inverseFitnessSum += fitnessSum / fitnessCalculator.getFitness(currentPopulation.individuums()[i]);
 		}
 			
-		int randomPick = random.nextInt(inverseQualitySum);
+		double randomPick = random.nextDouble() * inverseFitnessSum;
 		
-		int topQuality = 0;
+		double topFitness = 0;
 		int result = -1;
 		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
 			if(!alreadyDead[i]) {
-				topQuality += (qualitySum / qualityCalculator.getQuality(currentPopulation.individuums()[i]));
-				if(topQuality >= randomPick) {
+				topFitness += (fitnessSum / fitnessCalculator.getFitness(currentPopulation.individuums()[i]));
+				if(topFitness >= randomPick) {
 					result = i;
 					break;
 				}

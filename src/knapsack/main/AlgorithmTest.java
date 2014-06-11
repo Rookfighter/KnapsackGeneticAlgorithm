@@ -16,7 +16,7 @@ public class AlgorithmTest {
 	private static List<KnapsackProblem> problems;
 	
 	public static void main(String[] args) {
-		KnapsackParser parser = new KnapsackParser("res/mknapcb1.txt");
+		KnapsackParser parser = new KnapsackParser("res/mknap1.txt");
 		
 		try {
 			System.out.print("Parsing file...");
@@ -35,7 +35,7 @@ public class AlgorithmTest {
 	private static void userInteraction() throws FileNotFoundException, UnsupportedEncodingException {
 		int problem;
 		while(true) {
-			System.out.printf("Choose your problem (0-%d): ", problems.size());
+			System.out.printf("Choose your problem (0-%d): ", problems.size() - 1);
 			if(scanner.hasNextInt()) {
 				problem = scanner.nextInt();
 				break;

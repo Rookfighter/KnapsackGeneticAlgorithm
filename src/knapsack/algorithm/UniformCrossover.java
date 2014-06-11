@@ -42,8 +42,8 @@ public class UniformCrossover implements ICrossover {
 	private KnapsackIndividuum[] getChildren(KnapsackIndividuum mommy, KnapsackIndividuum daddy) {
 		KnapsackIndividuum[] result = new KnapsackIndividuum[2];
 		
-		for(int i = 0; i < currentPopulation.problem().partProblems().length; ++i) {
-			for(int j = 0; j < currentPopulation.problem().partProblems()[i].items().length; ++j) {
+		for(int i = 0; i < inheritanceMask.length; ++i) {
+			for(int j = 0; j < inheritanceMask[i].length; ++j) {
 				inheritanceMask[i][j] = random.nextBoolean();
 			}
 		}
@@ -57,7 +57,7 @@ public class UniformCrossover implements ICrossover {
 					result[0].qualities()[i][j] = daddy.qualities()[i][j];
 			}
 		}
-		applyToRules(result[0]);
+		result[0].applyToRules();
 		
 		result[1] = new KnapsackIndividuum(currentPopulation.problem());
 		for(int i = 0; i < currentPopulation.problem().partProblems().length; ++i) {
@@ -68,19 +68,9 @@ public class UniformCrossover implements ICrossover {
 					result[1].qualities()[i][j] = mommy.qualities()[i][j];
 			}
 		}
-		applyToRules(result[1]);
+		result[1].applyToRules();
 		
 		return result;
-	}
-	
-	private void applyToRules(KnapsackIndividuum fred) {
-		for(int i = 0; i < fred.qualities().length; ++i) {
-			while(fred.isOverLimit(i)) {
-				int toRemove = random.nextInt(fred.qualities()[i].length);
-				if(fred.qualities()[i][toRemove])
-					fred.qualities()[i][toRemove] = false;
-			}
-		}
 	}
 
 }

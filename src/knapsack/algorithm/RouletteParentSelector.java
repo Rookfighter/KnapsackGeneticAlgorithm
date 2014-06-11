@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Random;
 
 import knapsack.algorithm.interfaces.IParentSelector;
-import knapsack.algorithm.interfaces.IQualityCalculator;
+import knapsack.algorithm.interfaces.IFitnessCalculator;
 import knapsack.container.Population;
 
 public class RouletteParentSelector implements IParentSelector {
 
-	private IQualityCalculator qualityCalculator;
+	private IFitnessCalculator fitnessCalculator;
 	private float breedProbability;
 
 	Population currentPopulation;
@@ -19,8 +19,8 @@ public class RouletteParentSelector implements IParentSelector {
 
 	private Random random = new Random();
 	
-	public RouletteParentSelector(IQualityCalculator p_qualityCalculator, final float p_breedProbability, final int p_populationSize) {
-		qualityCalculator = p_qualityCalculator;
+	public RouletteParentSelector(IFitnessCalculator p_qualityCalculator, final float p_breedProbability, final int p_populationSize) {
+		fitnessCalculator = p_qualityCalculator;
 		breedProbability = p_breedProbability;
 		alreadyBreeded = new boolean[p_populationSize];
 	}
@@ -48,21 +48,21 @@ public class RouletteParentSelector implements IParentSelector {
 	}
 	
 	private int rouletteSelection() {
-		int qualitySum = 0;
+		double fitnessSum = 0;
 		
 		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
 			if(!alreadyBreeded[i])
-				qualitySum += qualityCalculator.getQuality(currentPopulation.individuums()[i]);
+				fitnessSum += fitnessCalculator.getFitness(currentPopulation.individuums()[i]);
 		}
 		
-		int randomPick = random.nextInt(qualitySum);
+		double randomPick = random.nextDouble() * fitnessSum;
 		
-		int topQuality = 0;
+		double topFitness = 0;
 		int result = -1;
 		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
 			if(!alreadyBreeded[i]) {
-				topQuality += qualityCalculator.getQuality(currentPopulation.individuums()[i]);
-				if(topQuality >= randomPick) {
+				topFitness += fitnessCalculator.getFitness(currentPopulation.individuums()[i]);
+				if(topFitness >= randomPick) {
 					result = i;
 					break;
 				}

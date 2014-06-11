@@ -4,7 +4,7 @@ import java.util.Locale;
 
 public class KnapsackPartProblem {
 
-	private int knappSackSize;
+	private double knappSackSize;
 	private KnapsackItem[] items;
 	
 	public KnapsackPartProblem(final int p_size) {
@@ -14,11 +14,11 @@ public class KnapsackPartProblem {
 			items[i] = new KnapsackItem();
 	}
 	
-	public int knappsackSize() {
+	public double knappsackSize() {
 		return knappSackSize;
 	}
 	
-	public void setKnappsackSize(final int p_knapsackSize) {
+	public void setKnappsackSize(final double p_knapsackSize) {
 		knappSackSize = p_knapsackSize;
 	}
 	

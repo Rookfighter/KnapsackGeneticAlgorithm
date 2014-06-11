@@ -26,31 +26,24 @@ public class RandomMutator implements IMutator {
 		for(int i = 0; i < p_population.individuums().length; ++i) {
 			boolean mutate = random.nextFloat() <= mutationProbability;
 			if(mutate) {
-				int index;
+				int individuumIndex;
 				do {
-					index = random.nextInt(p_population.individuums().length);
-				} while (alreadyMutated[index]);
+					individuumIndex = random.nextInt(p_population.individuums().length);
+				} while (alreadyMutated[individuumIndex]);
 				
-				KnapsackIndividuum individuum = p_population.individuums()[index];
+				KnapsackIndividuum individuum = p_population.individuums()[individuumIndex];
 				
-				index = random.nextInt(individuum.qualities().length);
-				int index2 = random.nextInt(individuum.qualities()[index].length);
+				int partProblem, item;
+				do {
+					partProblem = random.nextInt(individuum.qualities().length);
+					item = random.nextInt(individuum.qualities()[partProblem].length);
+				} while (individuum.isInvalidItem(partProblem, item));
 				
-				individuum.qualities()[index][index2] = !individuum.qualities()[index][index2];
-				
-				applyToRules(individuum);
+				individuum.qualities()[partProblem][item] = !individuum.qualities()[partProblem][item];
+				individuum.applyToRules();
 			}
 		}
 	}
 	
-	private void applyToRules(KnapsackIndividuum p_individuum) {
-		for(int i = 0; i < p_individuum.qualities().length; ++i) {
-			while(p_individuum.isOverLimit(i)) {
-				int toRemove = random.nextInt(p_individuum.qualities()[i].length);
-				if(p_individuum.qualities()[i][toRemove])
-					p_individuum.qualities()[i][toRemove] = false;
-			}
-		}
-	}
 
 }

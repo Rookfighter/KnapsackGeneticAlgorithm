@@ -8,7 +8,7 @@ import knapsack.misc.KnapsackParser;
 public class KnapsackParserTest {
 
 	public static void main(String[] args) {
-		KnapsackParser parser = new KnapsackParser("res/mknapcb1.txt");
+		KnapsackParser parser = new KnapsackParser("res/mknap1.txt");
 		try {
 			parser.parse();
 			

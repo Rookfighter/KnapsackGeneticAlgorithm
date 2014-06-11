@@ -1,7 +1,7 @@
 package knapsack.misc;
 
 import knapsack.algorithm.GenerationTermination;
-import knapsack.algorithm.QualityCalculator;
+import knapsack.algorithm.FitnessCalculator;
 import knapsack.algorithm.RandomMutator;
 import knapsack.algorithm.RandomPopulationFactory;
 import knapsack.algorithm.RouletteParentSelector;
@@ -11,7 +11,7 @@ import knapsack.algorithm.interfaces.ICrossover;
 import knapsack.algorithm.interfaces.IMutator;
 import knapsack.algorithm.interfaces.IParentSelector;
 import knapsack.algorithm.interfaces.IPopulationFactory;
-import knapsack.algorithm.interfaces.IQualityCalculator;
+import knapsack.algorithm.interfaces.IFitnessCalculator;
 import knapsack.algorithm.interfaces.ITerminationCondition;
 import knapsack.algorithm.interfaces.IToDieSelector;
 
@@ -23,7 +23,7 @@ public class AlgorithmConfig {
 	public float mutationProbability;
 	
 	public IPopulationFactory populationFactory;
-	public IQualityCalculator qualityCalculator;
+	public IFitnessCalculator qualityCalculator;
 	public IParentSelector parentSelector;
 	public IToDieSelector toDieSelector;
 	public ICrossover crossover;
@@ -31,9 +31,9 @@ public class AlgorithmConfig {
 	public ITerminationCondition condition;
 	
 	private static final int LOW_GEN = 10;
-	private static final int HIGH_GEN = 100;
+	private static final int HIGH_GEN = 2000;
 	private static final int LOW_POP = 10;
-	private static final int HIGH_POP = 100;
+	private static final int HIGH_POP = 400;
 	
 	public static AlgorithmConfig lowPopHighGenConfig() {
 		return createConfig(LOW_POP, HIGH_GEN, 0.7f, 0.2f);
@@ -61,7 +61,7 @@ public class AlgorithmConfig {
 		result.breedProbability = p_breedProbability;
 		result.mutationProbability = p_mutationProbability;
 		result.populationFactory = new RandomPopulationFactory();
-		result.qualityCalculator = new QualityCalculator();
+		result.qualityCalculator = new FitnessCalculator();
 		result.parentSelector = new RouletteParentSelector(result.qualityCalculator, result.breedProbability, result.populationSize);
 		result.toDieSelector = new RouletteToDieSelector(result.qualityCalculator, result.populationSize);
 		result.crossover = new UniformCrossover();
