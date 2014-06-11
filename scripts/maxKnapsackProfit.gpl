@@ -1,0 +1,5 @@
+set title "Max Knapsack Profit"
+set xlabel "Generation"
+set ylabel "Profit"
+set key left top
+plot 'maxKnapsackProfit.txt' using 1:2 with lines
