@@ -17,8 +17,7 @@ public class KnapsackParserTest {
 			for(int i = 0; i < problems.size(); ++i) {
 				System.out.printf("Problem %d:\n", i + 1);
 				KnapsackProblem problem = problems.get(i);
-				for(int j = 0; j < problem.partProblems().length; ++j)
-					System.out.println(problem.partProblems()[j].toString());
+				System.out.println(problem.toString());
 			}
 			
 		} catch (Exception e) {

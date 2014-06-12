@@ -39,13 +39,9 @@ public class Statistics {
 		
 		createDirectories(dirName);
 		
-		saveTotalWeightFiles(dirName);
-		saveTotalProfitFiles(dirName);
-		saveMeanWeightFiles(dirName);
-		saveMeanProfitFiles(dirName);
-		saveHighestIndividuumProfitFile(dirName);
-		saveHighestKnapsackProfitFile(dirName);
-		saveWeightRatioFile(dirName);
+		saveTotalProfit(dirName);
+		saveMeanProfit(dirName);
+		saveMaxProfit(dirName);
 	}
 	
 	private void createDirectories(String p_dir) {
@@ -56,25 +52,8 @@ public class Statistics {
 				throw new IllegalArgumentException("Could not create directories for plot files");
 		}
 	}
-	
-	private void saveTotalWeightFiles(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
-		int i = 0;
-		for(StatisticProblemElement problem: problems) {
-			PrintWriter writer = new PrintWriter(String.format("%s/problem%d/totalWeight.txt", p_dir, i), "UTF-8");
-			try {
-				int k = 0;
-				for(StatisticGenerationElement generation: problem.generations()) {
-					writer.printf(Locale.US, "%d \t %.2f\n", k, generation.totalWeight());
-					k++;
-				}
-			} finally {
-				writer.close();
-			}
-			++i;
-		}
-	}
 
-	private void saveTotalProfitFiles(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
+	private void saveTotalProfit(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
 		int i = 0;
 		for(StatisticProblemElement problem: problems) {
 			PrintWriter writer = new PrintWriter(String.format("%s/problem%d/totalProfit.txt", p_dir, i), "UTF-8");
@@ -91,24 +70,7 @@ public class Statistics {
 		}
 	}
 	
-	private void saveMeanWeightFiles(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
-		int i = 0;
-		for(StatisticProblemElement problem: problems) {
-			PrintWriter writer = new PrintWriter(String.format("%s/problem%d/meanWeight.txt", p_dir, i), "UTF-8");
-			try {
-				int k = 0;
-				for(StatisticGenerationElement generation: problem.generations()) {
-					writer.printf(Locale.US, "%d \t %.2f\n", k, generation.meanWeight());
-					k++;
-				}
-			} finally {
-				writer.close();
-			}
-			i++;
-		}
-	}
-	
-	private void saveMeanProfitFiles(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
+	private void saveMeanProfit(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
 		int i = 0;
 		for(StatisticProblemElement problem: problems) {
 			PrintWriter writer = new PrintWriter(String.format("%s/problem%d/meanProfit.txt", p_dir, i), "UTF-8");
@@ -125,48 +87,14 @@ public class Statistics {
 		}
 	}
 	
-	private void saveHighestIndividuumProfitFile(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
+	private void saveMaxProfit(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
 		int i = 0;
 		for(StatisticProblemElement problem: problems) {
-			PrintWriter writer = new PrintWriter(String.format("%s/problem%d/maxIndividuumProfit.txt", p_dir, i), "UTF-8");
+			PrintWriter writer = new PrintWriter(String.format("%s/problem%d/maxProfit.txt", p_dir, i), "UTF-8");
 			try {
 				int k = 0;
 				for(StatisticGenerationElement generation: problem.generations()) {
-					writer.printf(Locale.US, "%d \t %.2f\n", k, generation.highestIndividuumProfit());
-					k++;
-				}
-			} finally {
-				writer.close();
-			}
-			i++;
-		}
-	}
-	
-	private void saveHighestKnapsackProfitFile(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
-		int i = 0;
-		for(StatisticProblemElement problem: problems) {
-			PrintWriter writer = new PrintWriter(String.format("%s/problem%d/maxKnapsackProfit.txt", p_dir, i), "UTF-8");
-			try {
-				int k = 0;
-				for(StatisticGenerationElement generation: problem.generations()) {
-					writer.printf(Locale.US, "%d \t %.2f\n", k, generation.highestKnapsackProfit());
-					k++;
-				}
-			} finally {
-				writer.close();
-			}
-			i++;
-		}
-	}
-	
-	private void saveWeightRatioFile(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
-		int i = 0;
-		for(StatisticProblemElement problem: problems) {
-			PrintWriter writer = new PrintWriter(String.format("%s/problem%d/weightRatio.txt", p_dir, i), "UTF-8");
-			try {
-				int k = 0;
-				for(StatisticGenerationElement generation: problem.generations()) {
-					writer.printf(Locale.US, "%d \t %.2f\n", k, generation.weightRatio());
+					writer.printf(Locale.US, "%d \t %.2f\n", k, generation.maxProfit());
 					k++;
 				}
 			} finally {

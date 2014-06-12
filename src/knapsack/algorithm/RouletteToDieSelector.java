@@ -38,25 +38,26 @@ public class RouletteToDieSelector implements IToDieSelector {
 	}
 	
 	private int rouletteSelection() {
-		double fitnessSum = 0;
+		float fitnessSum = 0;
 		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
 			if(!alreadyDead[i])
 				fitnessSum += fitnessCalculator.getFitness(currentPopulation.individuums()[i]);
 		}
 			
-		
-		double inverseFitnessSum = 0;
+		float inverseFitnessSum = 0;
 		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
-			if(!alreadyDead[i])
-				inverseFitnessSum += fitnessSum / fitnessCalculator.getFitness(currentPopulation.individuums()[i]);
+			float fitness = fitnessCalculator.getFitness(currentPopulation.individuums()[i]);
+			if(!alreadyDead[i] && fitness > 0)
+				inverseFitnessSum += fitnessSum / fitness;
 		}
 			
-		double randomPick = random.nextDouble() * inverseFitnessSum;
+		float randomPick = random.nextFloat() * inverseFitnessSum;
 		
-		double topFitness = 0;
+		float topFitness = 0;
 		int result = -1;
 		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
-			if(!alreadyDead[i]) {
+			float fitness = fitnessCalculator.getFitness(currentPopulation.individuums()[i]);
+			if(!alreadyDead[i] && fitness > 0) {
 				topFitness += (fitnessSum / fitnessCalculator.getFitness(currentPopulation.individuums()[i]));
 				if(topFitness >= randomPick) {
 					result = i;

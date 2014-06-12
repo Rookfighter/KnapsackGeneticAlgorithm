@@ -1,8 +1,11 @@
 package knapsack.algorithm.interfaces;
 
-import knapsack.container.Population;
+import java.util.List;
+
+import knapsack.container.KnapsackIndividuum;
+
 
 public interface IMutator {
 
-	void mutate(Population p_population);
+	void mutate(List<KnapsackIndividuum> p_children);
 }

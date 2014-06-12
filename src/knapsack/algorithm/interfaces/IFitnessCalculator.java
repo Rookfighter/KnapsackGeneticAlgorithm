@@ -4,6 +4,6 @@ import knapsack.container.KnapsackIndividuum;
 
 public interface IFitnessCalculator {
 
-	double getFitness(final KnapsackIndividuum p_individuum);
+	float getFitness(final KnapsackIndividuum p_individuum);
 	
 }

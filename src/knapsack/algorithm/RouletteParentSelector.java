@@ -48,16 +48,16 @@ public class RouletteParentSelector implements IParentSelector {
 	}
 	
 	private int rouletteSelection() {
-		double fitnessSum = 0;
+		float fitnessSum = 0;
 		
 		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
 			if(!alreadyBreeded[i])
 				fitnessSum += fitnessCalculator.getFitness(currentPopulation.individuums()[i]);
 		}
 		
-		double randomPick = random.nextDouble() * fitnessSum;
+		float randomPick = random.nextFloat() * fitnessSum;
 		
-		double topFitness = 0;
+		float topFitness = 0;
 		int result = -1;
 		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
 			if(!alreadyBreeded[i]) {

@@ -22,19 +22,18 @@ public class GeneticAlgorithm {
 		statistics.nextProblem(p_problem);
 		Population population = config.populationFactory.generatePopulation(config.populationSize, p_problem);
 		config.condition.reset();
-		
 		do {
 			statistics.nextGeneration(population);
-			selecion(population);
-			config.mutator.mutate(population);
+			stepGeneration(population);
 		} while(!config.condition.terminate());
 	}
 	
-	private void selecion(Population p_population) {
+	private void stepGeneration(Population p_population) {
 		
 		List<Integer> parents = config.parentSelector.selectParents(p_population);
 		List<Integer> toDie = config.toDieSelector.selectToDie(p_population, parents.size()); 
 		List<KnapsackIndividuum> children = config.crossover.crossover(parents, p_population);
+		config.mutator.mutate(children);
 		
 		//kill indiviuums and add children
 		for(int i = 0; i < toDie.size(); ++i)

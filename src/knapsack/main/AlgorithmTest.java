@@ -9,19 +9,24 @@ import knapsack.algorithm.GeneticAlgorithm;
 import knapsack.container.KnapsackProblem;
 import knapsack.misc.AlgorithmConfig;
 import knapsack.misc.KnapsackParser;
+import knapsack.misc.StopWatch;
 
 public class AlgorithmTest {
 
 	private static Scanner scanner = new Scanner(System.in);
+	private static StopWatch watch = new StopWatch();
 	private static List<KnapsackProblem> problems;
 	
 	public static void main(String[] args) {
-		KnapsackParser parser = new KnapsackParser("res/mknap1.txt");
+		KnapsackParser parser = new KnapsackParser("res/mknapcb1.txt");
 		
 		try {
 			System.out.print("Parsing file...");
+			watch.start();
 			parser.parse();
-			System.out.println(" [Done]");
+			watch.stop();
+			System.out.print(" [Done]");
+			System.out.printf(" Time: [%dms] / [%.2fs]\n", watch.msec(), watch.sec());
 			AlgorithmTest.problems = parser.getProblems();
 			
 			runAlgorithm(AlgorithmConfig.highPopHighGenConfig(), 0);
@@ -97,7 +102,6 @@ public class AlgorithmTest {
 	}
 	
 	private static void runAlgorithm(AlgorithmConfig p_config, final int p_problem) throws FileNotFoundException, UnsupportedEncodingException {
-		long diff;
 		System.out.println("=================================");
 		System.out.println("Algorithm Config:");
 		System.out.printf("Generations: %d\n", p_config.generationCount);
@@ -108,12 +112,10 @@ public class AlgorithmTest {
 		
 		GeneticAlgorithm algorithm = new GeneticAlgorithm(p_config);
 		System.out.printf("Solving problem %d...", p_problem + 1);
-		diff = System.nanoTime();
+		watch.start();
 		algorithm.solve(AlgorithmTest.problems.get(p_problem));
-		diff = System.nanoTime() - diff;
-		System.out.print(" [Done]");
-		int ms = (int) (diff / 1000000);
-		System.out.printf(" Time: [%dms] / [%.2fs]\n", ms, ((double) ms) / 1000.0);
+		watch.stop();
+		System.out.printf(" Time: [%dms] / [%.2fs]\n", watch.msec(), watch.sec());
 		
 		System.out.print("Saving statistics...");
 		algorithm.getStatistics().saveGnuPlotFiles("plots");

@@ -65,27 +65,24 @@ public class KnapsackParser {
 		//read profits
 		for(int i = 0; i < variableCount; i += words.length) {
 			words = getNextFilledLine().split(" ");
-			for(int j = 0; j < words.length; ++j) {
-				double value = Double.parseDouble(words[j]);
-				for(int k = 0; k < constraintCount; ++k)
-					problem.partProblems()[k].items()[i + j].profit = value;
-			}
+			for(int j = 0; j < words.length; ++j) 
+				problem.items()[i + j].profit = Float.parseFloat(words[j]);
 		}
 		
-		//read weights
+		//read constraints
 		for(int i = 0; i < constraintCount; ++i) {
 			for(int j = 0; j < variableCount; j += words.length) {
 				words = getNextFilledLine().split(" ");
 				for(int k = 0; k < words.length; ++k)
-					problem.partProblems()[i].items()[j + k].weight = Double.parseDouble(words[k]);
+					problem.items()[j + k].constraints()[i] = Float.parseFloat(words[k]);
 			}
 		}
 		
-		//read max weights
+		//read maxConstraints
 		for(int i = 0; i < constraintCount; i += words.length) {
 			words = getNextFilledLine().split(" ");
 			for(int j = 0; j < words.length; ++j)
-				problem.partProblems()[i + j].setKnappsackSize(Double.parseDouble(words[j]));
+				problem.maxConstraints()[i + j] = Float.parseFloat(words[j]);
 		}
 		
 		return problem;

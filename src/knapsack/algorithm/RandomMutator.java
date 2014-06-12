@@ -1,17 +1,19 @@
 package knapsack.algorithm;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import knapsack.algorithm.interfaces.IMutator;
+import knapsack.algorithm.interfaces.IRulesApplyer;
 import knapsack.container.KnapsackIndividuum;
-import knapsack.container.Population;
 
 public class RandomMutator implements IMutator {
 
 	private float mutationProbability;
 	private boolean[] alreadyMutated;
 	
+	private final IRulesApplyer referee = new RandomApplyer();
 	private final Random random = new Random();
 	
 	public RandomMutator(final float p_mutationProbability, final int p_populationSize) {
@@ -20,27 +22,20 @@ public class RandomMutator implements IMutator {
 	}
 	
 	@Override
-	public void mutate(Population p_population) {
+	public void mutate(List<KnapsackIndividuum> p_children) {
 		Arrays.fill(alreadyMutated, false);
 		
-		for(int i = 0; i < p_population.individuums().length; ++i) {
+		for(int i = 0; i < p_children.size(); ++i) {
 			boolean mutate = random.nextFloat() <= mutationProbability;
 			if(mutate) {
-				int individuumIndex;
-				do {
-					individuumIndex = random.nextInt(p_population.individuums().length);
-				} while (alreadyMutated[individuumIndex]);
+				KnapsackIndividuum individuum = p_children.get(i);
 				
-				KnapsackIndividuum individuum = p_population.individuums()[individuumIndex];
+				int item;
+				item = random.nextInt(individuum.qualities().length);
 				
-				int partProblem, item;
-				do {
-					partProblem = random.nextInt(individuum.qualities().length);
-					item = random.nextInt(individuum.qualities()[partProblem].length);
-				} while (individuum.isInvalidItem(partProblem, item));
-				
-				individuum.qualities()[partProblem][item] = !individuum.qualities()[partProblem][item];
-				individuum.applyToRules();
+				// flip the quality
+				individuum.qualities()[item] = !individuum.qualities()[item];
+				referee.applyToRules(individuum);
 			}
 		}
 	}

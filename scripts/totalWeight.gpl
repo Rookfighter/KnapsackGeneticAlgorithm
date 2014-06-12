@@ -1,5 +1,0 @@
-set title "Total Weight"
-set xlabel "Generation"
-set ylabel "Weight"
-set key left top
-plot 'totalWeight.txt' using 1:2 with lines

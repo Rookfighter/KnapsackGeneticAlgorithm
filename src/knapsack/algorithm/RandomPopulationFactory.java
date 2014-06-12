@@ -9,7 +9,6 @@ import knapsack.container.Population;
 public class RandomPopulationFactory implements IPopulationFactory {
 	
 	private static final int MAX_TIMEOUT = 10;
-	
 	Population result;
 	
 	Random random;
@@ -27,10 +26,8 @@ public class RandomPopulationFactory implements IPopulationFactory {
 			int timeout = 0;
 			while(timeout < MAX_TIMEOUT) {
 				
-				int partProblem = random.nextInt(result.individuums()[i].qualities().length);
-				int item = random.nextInt(result.individuums()[i].qualities()[partProblem].length);
-
-				if(!result.individuums()[i].setQuality(partProblem, item, true)) 
+				int item = random.nextInt(result.individuums()[i].qualities().length);
+				if(!result.individuums()[i].setQuality(item, true)) 
 					++timeout;
 			}
 		}

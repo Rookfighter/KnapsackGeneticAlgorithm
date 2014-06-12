@@ -1,5 +1,0 @@
-set title "Weight Ratio"
-set xlabel "Generation"
-set ylabel "Ratio"
-set key left top
-plot 'weightRatio.txt' using 1:2 with lines

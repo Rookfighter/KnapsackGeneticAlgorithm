@@ -6,60 +6,30 @@ import knapsack.container.Population;
 
 public class StatisticGenerationElement {
 
-	private double totalWeight;
-	private double totalProfit;
-	
-	private double meanWeight;
-	private double meanProfit;
-	
-	private double highestIndidividuumProfit;
-	private double highestKnapsackProfit;
-	
-	private double weightRatio;
+	private float totalProfit;
+	private float meanProfit;
+	private float maxProfit;
 	
 	public StatisticGenerationElement(Population p_population) {
-		totalWeight = p_population.getTotalWeight();
 		totalProfit = p_population.getTotalProfit();
-		
-		meanWeight = p_population.getMeanWeight();
 		meanProfit = p_population.getMeanProfit();
-		
-		highestIndidividuumProfit = p_population.getHighestIndividuumProfit();
-		highestKnapsackProfit = p_population.getHighestKnapsackProfit();
-		
-		weightRatio = p_population.getWeightRatio();
+		maxProfit = p_population.getMaxProfit();
 	}
 	
-	public double totalWeight() {
-		return totalWeight;
-	}
-	
-	public double totalProfit() {
+	public float totalProfit() {
 		return totalProfit;
 	}
 	
-	public double meanWeight() {
-		return meanWeight;
-	}
-	
-	public double meanProfit() {
+	public float meanProfit() {
 		return meanProfit;
 	}
 	
-	public double highestIndividuumProfit() {
-		return highestIndidividuumProfit;
-	}
-	
-	public double highestKnapsackProfit() {
-		return highestKnapsackProfit;
-	}
-	
-	public double weightRatio() {
-		return weightRatio;
+	public float maxProfit() {
+		return maxProfit;
 	}
 	
 	@Override
 	public String toString() {
-		return String.format(Locale.US, "(%.2f,%.2f,%.2f,%.2f)", totalWeight, totalProfit, meanWeight, meanProfit);
+		return String.format(Locale.US, "(%.2f,%.2f,%.2f)", totalProfit, meanProfit, maxProfit);
 	}
 }

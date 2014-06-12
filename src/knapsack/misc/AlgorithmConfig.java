@@ -31,9 +31,9 @@ public class AlgorithmConfig {
 	public ITerminationCondition condition;
 	
 	private static final int LOW_GEN = 10;
-	private static final int HIGH_GEN = 2000;
+	private static final int HIGH_GEN = 100;
 	private static final int LOW_POP = 10;
-	private static final int HIGH_POP = 400;
+	private static final int HIGH_POP = 100;
 	
 	public static AlgorithmConfig lowPopHighGenConfig() {
 		return createConfig(LOW_POP, HIGH_GEN, 0.7f, 0.2f);

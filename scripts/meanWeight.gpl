@@ -1,5 +1,0 @@
-set title "Mean Weight"
-set xlabel "Generation"
-set ylabel "Weight"
-set key left top
-plot 'meanWeight.txt' using 1:2 with lines

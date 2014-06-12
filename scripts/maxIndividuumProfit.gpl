@@ -1,5 +1,0 @@
-set title "Max Individuum Profit"
-set xlabel "Generation"
-set ylabel "Profit"
-set key left top
-plot 'maxIndividuumProfit.txt' using 1:2 with lines
