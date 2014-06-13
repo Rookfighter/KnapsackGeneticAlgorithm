@@ -10,6 +10,13 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
+import com.panayotis.gnuplot.JavaPlot;
+import com.panayotis.gnuplot.plot.AbstractPlot;
+import com.panayotis.gnuplot.plot.DataSetPlot;
+import com.panayotis.gnuplot.style.PlotStyle;
+import com.panayotis.gnuplot.style.Style;
+import com.panayotis.gnuplot.utils.Debug;
+
 import knapsack.container.KnapsackProblem;
 import knapsack.container.Population;
 
@@ -18,9 +25,17 @@ public class Statistics {
 	private static final String DATE_FORMAT_NOW = "yyyy-MM-dd-HH-mm-ss";
 
 	private Deque<StatisticProblemElement> problems;
+	private float breedProbability;
+	private float mutationProbability;
+	private int generationCount;
+	private int populationSize;
 	
-	public Statistics() {
+	public Statistics(AlgorithmConfig p_config) {
 		problems = new LinkedList<StatisticProblemElement>();
+		breedProbability = p_config.breedProbability;
+		mutationProbability = p_config.mutationProbability;
+		generationCount = p_config.generationCount;
+		populationSize = p_config.populationSize;
 	}
 	
 	public void nextProblem(KnapsackProblem p_problem) {
@@ -38,6 +53,7 @@ public class Statistics {
 		String dirName = String.format("%s/%s", p_dir, now());
 		
 		createDirectories(dirName);
+		saveConfig(dirName);
 		
 		saveTotalProfit(dirName);
 		saveMeanProfit(dirName);
@@ -50,6 +66,18 @@ public class Statistics {
 			File file = new File(String.format("%s/problem%d", p_dir,  i));
 			if(!file.mkdirs())
 				throw new IllegalArgumentException("Could not create directories for plot files");
+		}
+	}
+	
+	private void saveConfig(String p_dir) throws FileNotFoundException, UnsupportedEncodingException {
+		PrintWriter writer = new PrintWriter(String.format("%s/configuration.txt", p_dir), "UTF-8");
+		try {
+			writer.printf(Locale.US, "Breed probability: %.4f\n", breedProbability);
+			writer.printf(Locale.US, "Mutation probability: %.4f\n", mutationProbability);
+			writer.printf(Locale.US, "Generation count: %d\n", generationCount);
+			writer.printf(Locale.US, "Population size: %d\n", populationSize);
+		} finally {
+			writer.close();
 		}
 	}
 
@@ -104,6 +132,37 @@ public class Statistics {
 		}
 	}
 	
+	public void plot() {
+		for(StatisticProblemElement problem : problems)
+			plotMeanProfit(problem);
+	}
+	
+	private void plotMeanProfit(StatisticProblemElement p_problem) {
+		JavaPlot plot = new JavaPlot();
+        JavaPlot.getDebugger().setLevel(Debug.QUIET);
+        
+        plot.setTitle("Mean Profit");
+        plot.getAxis("x").setLabel("Generation");
+        plot.getAxis("y").setLabel("Profit");
+        
+        double[][] plots = new double[p_problem.generations().size()][2];
+        
+        int i = 0;
+        for(StatisticGenerationElement generation : p_problem.generations()) {
+        	plots[i][0] = i;
+        	plots[i][1] = generation.meanProfit();
+        	i++;
+        }
+        
+        DataSetPlot dataSet = new DataSetPlot(plots);
+        plot.addPlot(dataSet);
+        
+        PlotStyle stl = ((AbstractPlot) plot.getPlots().get(0)).getPlotStyle();
+        stl.setStyle(Style.LINES);
+        plot.plot();
+        
+	}
+	
 	private String now() {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
@@ -121,6 +180,22 @@ public class Statistics {
 		}
 		
 		return sb.toString().trim();
+	}
+	
+	public float breedProbability() {
+		return breedProbability;
+	}
+	
+	public float mutationProbability() {
+		return mutationProbability;
+	}
+	
+	public int generationCount() {
+		return generationCount;
+	}
+	
+	public int populationSize() {
+		return populationSize;
 	}
 	
 }

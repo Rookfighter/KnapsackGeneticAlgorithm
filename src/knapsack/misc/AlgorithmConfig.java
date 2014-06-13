@@ -5,8 +5,8 @@ import knapsack.algorithm.FitnessCalculator;
 import knapsack.algorithm.RandomMutator;
 import knapsack.algorithm.RandomPopulationFactory;
 import knapsack.algorithm.RouletteParentSelector;
-import knapsack.algorithm.RouletteToDieSelector;
 import knapsack.algorithm.UniformCrossover;
+import knapsack.algorithm.WorstFitnessToDieSelector;
 import knapsack.algorithm.interfaces.ICrossover;
 import knapsack.algorithm.interfaces.IMutator;
 import knapsack.algorithm.interfaces.IParentSelector;
@@ -31,9 +31,9 @@ public class AlgorithmConfig {
 	public ITerminationCondition condition;
 	
 	private static final int LOW_GEN = 10;
-	private static final int HIGH_GEN = 100;
+	private static final int HIGH_GEN = 1000;
 	private static final int LOW_POP = 10;
-	private static final int HIGH_POP = 100;
+	private static final int HIGH_POP = 300;
 	
 	public static AlgorithmConfig lowPopHighGenConfig() {
 		return createConfig(LOW_POP, HIGH_GEN, 0.7f, 0.2f);
@@ -63,7 +63,7 @@ public class AlgorithmConfig {
 		result.populationFactory = new RandomPopulationFactory();
 		result.qualityCalculator = new FitnessCalculator();
 		result.parentSelector = new RouletteParentSelector(result.qualityCalculator, result.breedProbability, result.populationSize);
-		result.toDieSelector = new RouletteToDieSelector(result.qualityCalculator, result.populationSize);
+		result.toDieSelector = new WorstFitnessToDieSelector(result.qualityCalculator, result.populationSize);
 		result.crossover = new UniformCrossover();
 		result.mutator = new RandomMutator(result.mutationProbability, result.populationSize);
 		result.generationCount = p_generationCount;

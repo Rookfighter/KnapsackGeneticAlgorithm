@@ -71,7 +71,8 @@ public class KnapsackIndividuum {
 	}
 	
 	public void apply(KnapsackIndividuum p_individuum) {
-		qualities = p_individuum.qualities;
+		for(int i = 0; i < qualities.length; ++i)
+			qualities[i] = p_individuum.qualities[i];
 	}
 	
 	@Override

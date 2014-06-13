@@ -9,8 +9,10 @@ public class StatisticProblemElement {
 	
 	private Deque<StatisticGenerationElement> generations;
 	
+	
 	public StatisticProblemElement(KnapsackProblem p_problem) {
 		generations = new LinkedList<StatisticGenerationElement>();
+		
 	}
 	
 	public Deque<StatisticGenerationElement> generations() {

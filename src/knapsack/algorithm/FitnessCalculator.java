@@ -9,5 +9,4 @@ public class FitnessCalculator implements IFitnessCalculator {
 	public float getFitness(final KnapsackIndividuum p_individuum) {
 		return p_individuum.getProfit();
 	}
-
 }

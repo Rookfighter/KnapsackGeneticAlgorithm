@@ -12,10 +12,11 @@ public class GeneticAlgorithm {
 
 	private AlgorithmConfig config;
 	
-	private final Statistics statistics = new Statistics();
+	private final Statistics statistics;
 	
 	public GeneticAlgorithm(AlgorithmConfig p_config) {
 		config = p_config;
+		statistics = new Statistics(p_config);
 	}
 	
 	public void solve(KnapsackProblem p_problem){

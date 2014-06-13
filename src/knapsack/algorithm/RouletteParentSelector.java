@@ -14,23 +14,24 @@ public class RouletteParentSelector implements IParentSelector {
 	private IFitnessCalculator fitnessCalculator;
 	private float breedProbability;
 
-	Population currentPopulation;
-	boolean[] alreadyBreeded;
-
+	private Population currentPopulation;
+	private boolean[] alreadyBreeded;
+	private List<Integer> result;
+	
 	private Random random = new Random();
 	
 	public RouletteParentSelector(IFitnessCalculator p_qualityCalculator, final float p_breedProbability, final int p_populationSize) {
 		fitnessCalculator = p_qualityCalculator;
 		breedProbability = p_breedProbability;
 		alreadyBreeded = new boolean[p_populationSize];
+		result = new ArrayList<Integer>(p_populationSize);
 	}
 	
 	@Override
 	public List<Integer> selectParents(Population p_population) {
 		currentPopulation = p_population;
 		Arrays.fill(alreadyBreeded, false);
-	
-		List<Integer> result = new ArrayList<Integer>((int) (currentPopulation.individuums().length * breedProbability));
+		result.clear();
 		
 		for(int i = 0; i < currentPopulation.individuums().length; i++) {
 			boolean breed = random.nextFloat() <= breedProbability;

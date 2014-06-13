@@ -3,6 +3,7 @@ package knapsack.main;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 import knapsack.algorithm.GeneticAlgorithm;
@@ -11,13 +12,14 @@ import knapsack.misc.AlgorithmConfig;
 import knapsack.misc.KnapsackParser;
 import knapsack.misc.StopWatch;
 
-public class AlgorithmTest {
+public class KnapsackGeneticAlgorithm {
 
 	private static Scanner scanner = new Scanner(System.in);
 	private static StopWatch watch = new StopWatch();
 	private static List<KnapsackProblem> problems;
 	
 	public static void main(String[] args) {
+		scanner.useLocale(Locale.US);
 		KnapsackParser parser = new KnapsackParser("res/mknapcb1.txt");
 		
 		try {
@@ -27,9 +29,10 @@ public class AlgorithmTest {
 			watch.stop();
 			System.out.print(" [Done]");
 			System.out.printf(" Time: [%dms] / [%.2fs]\n", watch.msec(), watch.sec());
-			AlgorithmTest.problems = parser.getProblems();
+			KnapsackGeneticAlgorithm.problems = parser.getProblems();
 			
-			runAlgorithm(AlgorithmConfig.highPopHighGenConfig(), 0);
+			while(true)
+				userInteraction();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -43,10 +46,14 @@ public class AlgorithmTest {
 			System.out.printf("Choose your problem (0-%d): ", problems.size() - 1);
 			if(scanner.hasNextInt()) {
 				problem = scanner.nextInt();
-				break;
+				
+				if(problem < 0 || problem >= problems.size())
+					System.out.printf("Invalid input. Choose from 0-%d.\n", problems.size() - 1);
+				else
+					break;
 			} else {
 				scanner.next();
-				System.out.println("Please enter a number.");
+				System.out.println("Invalid input. Please enter a number.");
 			}
 		}
 		
@@ -55,10 +62,14 @@ public class AlgorithmTest {
 			System.out.print("Choose population size: ");
 			if(scanner.hasNextInt()) {
 				populationSize = scanner.nextInt();
-				break;
+				
+				if(populationSize <= 0)
+					System.out.println("Invalid input. Population size has to be higher than 0.");
+				else
+					break;
 			} else {
 				scanner.next();
-				System.out.println("Please enter a number.");
+				System.out.println("Invalid input. Please enter a number.");
 			}
 		}
 		
@@ -67,10 +78,13 @@ public class AlgorithmTest {
 			System.out.print("Choose generation count: ");
 			if(scanner.hasNextInt()) {
 				generationCount = scanner.nextInt();
-				break;
+				if(generationCount <= 0)
+					System.out.println("Invalid input. Generation count has to be higher than 0.");
+				else
+					break;
 			} else {
 				scanner.next();
-				System.out.println("Please enter a number.");
+				System.out.println("Invalid input. Please enter a number.");
 			}
 		}
 		
@@ -79,7 +93,10 @@ public class AlgorithmTest {
 			System.out.print("Choose breed probability: ");
 			if(scanner.hasNextFloat()) {
 				breedProbability = scanner.nextFloat();
-				break;
+				if(breedProbability < 0 || breedProbability > 1)
+					System.out.println("Invalid input. Probability has to be 0 <= p <= 1.");
+				else
+					break;
 			} else {
 				scanner.next();
 				System.out.println("Please enter a number.");
@@ -91,7 +108,10 @@ public class AlgorithmTest {
 			System.out.print("Choose mutation probability: ");
 			if(scanner.hasNextFloat()) {
 				mutationProbability = scanner.nextFloat();
-				break;
+				if(mutationProbability < 0 || mutationProbability > 1)
+					System.out.println("Invalid input. Probability has to be 0 <= p <= 1.");
+				else
+					break;
 			} else {
 				scanner.next();
 				System.out.println("Please enter a number.");
@@ -113,7 +133,7 @@ public class AlgorithmTest {
 		GeneticAlgorithm algorithm = new GeneticAlgorithm(p_config);
 		System.out.printf("Solving problem %d...", p_problem + 1);
 		watch.start();
-		algorithm.solve(AlgorithmTest.problems.get(p_problem));
+		algorithm.solve(KnapsackGeneticAlgorithm.problems.get(p_problem));
 		watch.stop();
 		System.out.printf(" Time: [%dms] / [%.2fs]\n", watch.msec(), watch.sec());
 		
@@ -122,6 +142,7 @@ public class AlgorithmTest {
 		System.out.println(" [Done]");
 		System.out.println("Genetic Algorithm terminated.");
 		System.out.println("=================================");
+		algorithm.getStatistics().plot();
 	}
 
 }

@@ -28,7 +28,14 @@ public class RouletteToDieSelector implements IToDieSelector {
 		List<Integer> result = new ArrayList<Integer>(p_toDieCount);
 		Arrays.fill(alreadyDead, false);
 		
-		for(int i = 0; i < p_toDieCount; i++) {
+		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
+			if(fitnessCalculator.getFitness(currentPopulation.individuums()[i]) == 0 && result.size() < p_toDieCount) {
+				alreadyDead[i] = true;
+				result.add(i);
+			}
+		}
+		
+		for(int i = result.size(); i < p_toDieCount; i++) {
 			int parent = rouletteSelection();
 			alreadyDead[parent] = true;
 			result.add(parent);
@@ -46,9 +53,8 @@ public class RouletteToDieSelector implements IToDieSelector {
 			
 		float inverseFitnessSum = 0;
 		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
-			float fitness = fitnessCalculator.getFitness(currentPopulation.individuums()[i]);
-			if(!alreadyDead[i] && fitness > 0)
-				inverseFitnessSum += fitnessSum / fitness;
+			if(!alreadyDead[i])
+				inverseFitnessSum += fitnessSum / fitnessCalculator.getFitness(currentPopulation.individuums()[i]);
 		}
 			
 		float randomPick = random.nextFloat() * inverseFitnessSum;
@@ -56,8 +62,7 @@ public class RouletteToDieSelector implements IToDieSelector {
 		float topFitness = 0;
 		int result = -1;
 		for(int i = 0; i < currentPopulation.individuums().length; ++i) {
-			float fitness = fitnessCalculator.getFitness(currentPopulation.individuums()[i]);
-			if(!alreadyDead[i] && fitness > 0) {
+			if(!alreadyDead[i]) {
 				topFitness += (fitnessSum / fitnessCalculator.getFitness(currentPopulation.individuums()[i]));
 				if(topFitness >= randomPick) {
 					result = i;
